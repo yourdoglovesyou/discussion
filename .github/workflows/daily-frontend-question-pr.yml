@@ -67,6 +67,6 @@ jobs:
             automated
             frontend-question
           reviewers: |
-            prgmr99
-            klmhyeonwoo
+            @prgmr99
+            @klmhyeonwoo
           delete-branch: true
