@@ -45,7 +45,8 @@ jobs:
 
             ${{ steps.generate.outputs.question }}
 
-            ## Detail
+            <details>
+            <summary>Detail</summary>
 
             - Track: `${{ steps.generate.outputs.track }}`
             - Category: `${{ steps.generate.outputs.category }}`
@@ -53,6 +54,7 @@ jobs:
             - Follow-up 2: ${{ steps.generate.outputs.follow_up_2 }}
             - Reference hint: `${{ steps.generate.outputs.reference_hint }}`
             - Reference question: `${{ steps.generate.outputs.reference_question }}`
+            </details>
 
             - File: `${{ steps.generate.outputs.file_path }}`
             - Source mode: `${{ steps.generate.outputs.source_mode }}`

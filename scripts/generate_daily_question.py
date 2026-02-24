@@ -516,12 +516,10 @@ def sanitize_inline(text: str) -> str:
 
 def build_pr_title(question: str) -> str:
     plain = sanitize_inline(question).replace("`", "")
-    prefix = "chore: daily tech question - "
     max_len = 180
-    allowed = max_len - len(prefix)
-    if len(plain) > allowed:
-        plain = plain[: allowed - 3].rstrip() + "..."
-    return f"{prefix}{plain}"
+    if len(plain) > max_len:
+        plain = plain[: max_len - 3].rstrip() + "..."
+    return plain or "Daily Tech Question"
 
 
 def write_markdown(
