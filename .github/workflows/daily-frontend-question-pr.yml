@@ -30,6 +30,8 @@ jobs:
           QUESTION_GENERATION_MODE: ${{ vars.QUESTION_GENERATION_MODE || 'always' }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || '' }}
+          GEMINI_REQUEST_TIMEOUT_SEC: ${{ vars.GEMINI_REQUEST_TIMEOUT_SEC || '60' }}
+          GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '7' }}
         run: python scripts/generate_daily_question.py
 
       - name: Create Pull Request

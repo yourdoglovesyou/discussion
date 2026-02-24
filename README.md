@@ -31,6 +31,10 @@
   - 기본값: `always`
 - `GEMINI_MODEL` (선택)
   - 기본값: `gemini-2.5-flash`
+- `GEMINI_REQUEST_TIMEOUT_SEC` (선택)
+  - 기본값: `60`
+- `GEMINI_MAX_RETRIES` (선택)
+  - 기본값: `7`
 
 2. `Settings > Secrets and variables > Actions > Secrets`
 - `QUESTION_SOURCE_COOKIE` (선택)
@@ -50,5 +54,6 @@
 - 계정에서 허용된 Gemini 모델을 `models.list`로 조회해, 사용 가능한 모델을 우선 선택합니다.
 - `tts/embedding/image` 등 텍스트 질문 생성에 맞지 않는 모델은 자동 제외합니다.
 - Gemini 응답이 JSON 형식이 아니거나 비어 있으면 동일 모델에서 재시도 후 다음 후보 모델로 넘어갑니다.
+- 일시적 네트워크 타임아웃은 동일 모델에서 재시도합니다(`GEMINI_REQUEST_TIMEOUT_SEC`, `GEMINI_MAX_RETRIES`로 조정 가능).
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`

@@ -6,6 +6,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -286,6 +287,17 @@ def normalize_gemini_model(model: str) -> str:
     return model
 
 
+def get_int_env(name: str, default: int, min_value: int = 1) -> int:
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return default
+    try:
+        parsed = int(raw)
+    except ValueError:
+        return default
+    return max(parsed, min_value)
+
+
 def is_text_model_candidate(model_name: str) -> bool:
     lowered = model_name.lower()
     blocked_tokens = ["tts", "embedding", "image", "aqa"]
@@ -306,13 +318,13 @@ def build_base_url_candidates(base_url: str) -> list[str]:
     return unique
 
 
-def list_generate_content_models(api_key: str, base_url: str) -> tuple[list[str], str, str]:
+def list_generate_content_models(api_key: str, base_url: str, timeout_sec: int) -> tuple[list[str], str, str]:
     last_error = ""
     for base in build_base_url_candidates(base_url):
         list_endpoint = f"{base}/models?key={quote_plus(api_key)}"
         request = Request(list_endpoint, method="GET")
         try:
-            with urlopen(request, timeout=30) as response:
+            with urlopen(request, timeout=timeout_sec) as response:
                 payload = json.loads(response.read().decode("utf-8"))
         except HTTPError as err:
             body = ""
@@ -355,6 +367,8 @@ def generate_ai_question(
     topic: dict,
     reference_question: str,
     base_url: str = "https://generativelanguage.googleapis.com/v1beta",
+    request_timeout_sec: int = 60,
+    max_attempts: int = 7,
 ) -> tuple[str, list[str], str, str]:
     track_label = "CS" if track == "cs" else "Frontend"
     reference_line = reference_question if reference_question else "N/A"
@@ -386,7 +400,7 @@ def generate_ai_question(
         ],
         "generationConfig": {
             "temperature": 0.7,
-            "maxOutputTokens": 600,
+            "maxOutputTokens": 320,
             "responseMimeType": "application/json",
             "responseSchema": {
                 "type": "OBJECT",
@@ -404,6 +418,7 @@ def generate_ai_question(
     discovered_models, working_base_url, discovery_error = list_generate_content_models(
         api_key=api_key,
         base_url=base_url,
+        timeout_sec=request_timeout_sec,
     )
     candidates: list[str] = [
         requested_model,
@@ -422,7 +437,7 @@ def generate_ai_question(
     last_error = ""
     for candidate_model in unique_candidates:
         endpoint = f"{working_base_url}/models/{candidate_model}:generateContent?key={quote_plus(api_key)}"
-        for attempt in range(1, 4):
+        for attempt in range(1, max_attempts + 1):
             payload = json.loads(json.dumps(base_payload))
             if attempt >= 2:
                 # Retry 시 JSON 형식 요구를 더 강하게 줘서 비정형 응답을 줄인다.
@@ -440,7 +455,7 @@ def generate_ai_question(
                 method="POST",
             )
             try:
-                with urlopen(request, timeout=30) as response:
+                with urlopen(request, timeout=request_timeout_sec) as response:
                     response_data = json.loads(response.read().decode("utf-8"))
             except HTTPError as err:
                 error_body = ""
@@ -465,6 +480,16 @@ def generate_ai_question(
                 if err.code in (429, 500, 503):
                     continue
                 raise ValueError(last_error) from err
+            except (URLError, TimeoutError, json.JSONDecodeError) as err:
+                last_error = (
+                    "Gemini request failed "
+                    f"(base={working_base_url}, model={candidate_model}, attempt={attempt}/{max_attempts}, "
+                    f"timeout={request_timeout_sec}s): {err}"
+                )
+                # 짧은 지수 백오프로 일시적 네트워크 타임아웃 완화
+                if attempt < max_attempts:
+                    time.sleep(min(1.5 * attempt, 5.0))
+                continue
 
             raw_text = extract_gemini_text(response_data)
             if not raw_text:
@@ -642,6 +667,8 @@ def main() -> int:
     gemini_base_url = os.environ.get(
         "GEMINI_API_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"
     ).strip()
+    gemini_request_timeout_sec = get_int_env("GEMINI_REQUEST_TIMEOUT_SEC", 60, min_value=5)
+    gemini_max_retries = get_int_env("GEMINI_MAX_RETRIES", 7, min_value=1)
     use_ai = args.generation_mode == "always" or (
         args.generation_mode == "auto" and bool(gemini_api_key)
     )
@@ -660,6 +687,8 @@ def main() -> int:
                 topic=topic,
                 reference_question=reference_question,
                 base_url=gemini_base_url,
+                request_timeout_sec=gemini_request_timeout_sec,
+                max_attempts=gemini_max_retries,
             )
             source_mode = "ai+reference" if reference_question else "ai"
         except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError) as err:
