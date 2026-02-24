@@ -48,6 +48,7 @@
 - `PR_BOT_TOKEN` (선택, 권장)
   - reviewer 지정 안정성을 위해 `create-pull-request`에서 우선 사용
   - 권한: private repo 기준 `repo` (organization이면 `read:org` 추가 권장)
+  - PR 작성자는 reviewer 요청 대상에서 자동 제외됨
 
 ## Manual run
 

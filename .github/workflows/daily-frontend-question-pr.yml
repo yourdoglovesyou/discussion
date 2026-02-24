@@ -36,6 +36,7 @@ jobs:
         run: python scripts/generate_daily_question.py
 
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.PR_BOT_TOKEN || github.token }}
@@ -67,7 +68,37 @@ jobs:
           labels: |
             automated
             frontend-question
-          reviewers: |
-            prgmr99
-            klmhyeonwoo
           delete-branch: true
+
+      - name: Request Reviewers (Exclude Author)
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.PR_BOT_TOKEN || github.token }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = Number('${{ steps.cpr.outputs.pull-request-number }}');
+
+            const { data: pr } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number,
+            });
+
+            const author = String(pr.user.login || '').toLowerCase();
+            const candidates = ['prgmr99', 'klmhyeonwoo'];
+            const reviewers = candidates.filter((u) => u.toLowerCase() !== author);
+
+            if (reviewers.length === 0) {
+              core.info('No eligible reviewers after excluding PR author.');
+              return;
+            }
+
+            await github.rest.pulls.requestReviewers({
+              owner,
+              repo,
+              pull_number,
+              reviewers,
+            });
+            core.info(`Requested reviewers: ${reviewers.join(', ')}`);
