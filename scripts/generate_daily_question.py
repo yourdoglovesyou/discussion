@@ -1,0 +1,362 @@
+#!/usr/bin/env python3
+import argparse
+import hashlib
+import html
+import os
+import re
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+KST = timezone(timedelta(hours=9))
+
+FRONTEND_INTERVIEW_TOPICS = [
+    {
+        "category": "React Architecture",
+        "subject": "상태 관리 경계",
+        "scenario": "검색/필터/정렬이 동시에 바뀌는 대시보드",
+        "tradeoff": "지역 상태, 전역 상태, 서버 상태를 어떻게 분리할지",
+    },
+    {
+        "category": "Rendering Performance",
+        "subject": "렌더링 병목 진단",
+        "scenario": "스크롤 중 카드 리스트가 버벅이는 모바일 웹",
+        "tradeoff": "memoization, virtualization, 계산 캐싱의 적용 기준",
+    },
+    {
+        "category": "Browser Internals",
+        "subject": "Reflow/Repaint/Composite 최적화",
+        "scenario": "실시간 애니메이션이 많은 랜딩 페이지",
+        "tradeoff": "레이아웃 변경 최소화와 시각 품질의 균형",
+    },
+    {
+        "category": "TypeScript",
+        "subject": "타입 설계 전략",
+        "scenario": "빠르게 변하는 백엔드 응답 스키마",
+        "tradeoff": "유연성과 타입 안정성 사이의 의사결정",
+    },
+    {
+        "category": "Data Fetching",
+        "subject": "캐싱/동기화 정책",
+        "scenario": "동일 데이터가 여러 화면에서 동시에 수정되는 서비스",
+        "tradeoff": "낙관적 업데이트, 재검증, 롤백 전략",
+    },
+    {
+        "category": "SSR/CSR Strategy",
+        "subject": "렌더링 전략 선택",
+        "scenario": "SEO와 실시간성이 모두 중요한 커머스 페이지",
+        "tradeoff": "초기 로딩 속도와 상호작용 성능 간의 균형",
+    },
+    {
+        "category": "Testing",
+        "subject": "테스트 피라미드 설계",
+        "scenario": "릴리즈 주기가 매우 짧은 제품 팀",
+        "tradeoff": "신뢰도와 유지보수 비용의 균형",
+    },
+    {
+        "category": "Web Security",
+        "subject": "브라우저 보안 대응",
+        "scenario": "사용자 생성 HTML을 렌더링하는 기능",
+        "tradeoff": "보안 강도와 개발 생산성 간의 균형",
+    },
+    {
+        "category": "Accessibility",
+        "subject": "키보드/스크린리더 접근성",
+        "scenario": "커스텀 컴포넌트 기반 디자인 시스템",
+        "tradeoff": "디자인 자유도와 접근성 표준 준수",
+    },
+    {
+        "category": "Bundling",
+        "subject": "번들 최적화",
+        "scenario": "초기 진입 페이지 번들 크기가 큰 SaaS",
+        "tradeoff": "개발 편의성과 런타임 성능의 균형",
+    },
+]
+
+CS_INTERVIEW_TOPICS = [
+    {
+        "category": "Data Structures",
+        "subject": "배열 vs 연결 리스트 선택",
+        "scenario": "잦은 삽입/삭제와 랜덤 접근이 공존하는 UI 상태 저장",
+        "tradeoff": "시간복잡도, 메모리 오버헤드, 구현 복잡도의 균형",
+    },
+    {
+        "category": "Algorithms",
+        "subject": "정렬/탐색 전략",
+        "scenario": "대량 목록 필터링과 정렬이 반복되는 클라이언트 화면",
+        "tradeoff": "정확도, 응답속도, CPU 사용량의 균형",
+    },
+    {
+        "category": "Complexity",
+        "subject": "시간복잡도 최적화",
+        "scenario": "렌더링 전 데이터 가공 단계가 길어지는 대시보드",
+        "tradeoff": "사전 계산, 캐시, 메모리 사용량 간의 균형",
+    },
+    {
+        "category": "Network",
+        "subject": "TCP/HTTP 동작 이해",
+        "scenario": "API 응답 지연으로 초기 화면 표시가 느린 서비스",
+        "tradeoff": "요청 병렬화, 커넥션 재사용, 캐시 정책의 균형",
+    },
+    {
+        "category": "Concurrency",
+        "subject": "이벤트 루프/비동기 처리",
+        "scenario": "사용자 입력, 애니메이션, 데이터 요청이 동시에 발생",
+        "tradeoff": "응답성 유지와 작업 순서 보장의 균형",
+    },
+    {
+        "category": "Caching",
+        "subject": "캐시 일관성",
+        "scenario": "여러 탭에서 동일 리소스를 갱신하는 웹앱",
+        "tradeoff": "최신성, 성능, 구현 복잡도 간의 균형",
+    },
+    {
+        "category": "Database Basics",
+        "subject": "인덱스와 조회 패턴",
+        "scenario": "검색 API 속도가 화면 UX를 좌우하는 서비스",
+        "tradeoff": "쓰기 성능 저하와 읽기 성능 향상의 균형",
+    },
+    {
+        "category": "System Design",
+        "subject": "확장성/장애 대응",
+        "scenario": "트래픽 급증 시 프론트-백엔드 경계에서 장애 전파",
+        "tradeoff": "복잡도 증가와 안정성 확보의 균형",
+    },
+]
+
+QUESTION_TEMPLATES = [
+    "네카라쿠배 기술면접 맥락에서, `{scenario}` 상황이라면 프론트엔드에서 `{subject}`를 어떤 기준으로 설계하시겠어요? 특히 `{tradeoff}`를 근거와 함께 설명해 주세요.",
+    "대규모 트래픽을 가정한 네카라쿠배 스타일 질문입니다. `{scenario}`에서 `{subject}` 문제를 해결할 때, 우선순위와 측정 지표를 어떻게 잡을지 설명해 주세요.",
+    "실무 중심 질문입니다. `{scenario}` 기능을 맡았을 때 `{subject}` 관점에서 아키텍처 결정을 어떻게 내릴지, 선택하지 않은 대안까지 비교해 주세요.",
+]
+
+FOLLOW_UP_TEMPLATES = [
+    "장애가 발생했을 때 가장 먼저 확인할 관측 지표 2가지는 무엇인가요?",
+    "팀 컨벤션으로 강제하고 싶은 규칙 1가지를 제안해 주세요.",
+    "이 결정을 검증하기 위한 테스트 전략(Unit/Integration/E2E)은 어떻게 가져가시겠어요?",
+    "기술 부채를 최소화하기 위해 초기 설계에서 어떤 타협을 하시겠어요?",
+]
+
+REFERENCE_HINT_KEYWORDS = [
+    "react",
+    "typescript",
+    "렌더링",
+    "성능",
+    "캐싱",
+    "상태",
+    "접근성",
+    "번들",
+    "테스트",
+    "ssr",
+    "csr",
+    "graphql",
+]
+
+
+def clean_text(value: str) -> str:
+    value = html.unescape(value)
+    value = re.sub(r"<[^>]+>", " ", value)
+    value = re.sub(r"\s+", " ", value).strip()
+    return value
+
+
+def extract_question(html_text: str) -> str:
+    patterns = [
+        r'<meta[^>]+property=["\']og:title["\'][^>]+content=["\']([^"\']+)["\']',
+        r'<meta[^>]+name=["\']twitter:title["\'][^>]+content=["\']([^"\']+)["\']',
+        r"<title[^>]*>(.*?)</title>",
+        r"<h1[^>]*>(.*?)</h1>",
+        r'"question"\s*:\s*"([^"]+)"',
+        r'"text"\s*:\s*"([^"]+\?)"',
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, html_text, re.IGNORECASE | re.DOTALL)
+        if not match:
+            continue
+        candidate = clean_text(match.group(1))
+        if len(candidate) < 8:
+            continue
+        candidate = re.split(r"\s+[|·-]\s+", candidate, maxsplit=1)[0].strip()
+        return candidate
+    return ""
+
+
+def fetch_source_question(source_url: str, cookie: str = "") -> str:
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36"
+        )
+    }
+    if cookie:
+        headers["Cookie"] = cookie
+
+    request = Request(source_url, headers=headers)
+    with urlopen(request, timeout=20) as response:
+        html_text = response.read().decode("utf-8", errors="replace")
+    question = extract_question(html_text)
+    return question
+
+
+def stable_seed(date_key: str, reference_question: str) -> int:
+    seed_source = f"{date_key}|{reference_question}".encode("utf-8")
+    return int(hashlib.sha256(seed_source).hexdigest(), 16)
+
+
+def infer_reference_hint(reference_question: str) -> str:
+    if not reference_question:
+        return "일반 프론트엔드 핵심 역량"
+    lowered = reference_question.lower()
+    matched = [kw for kw in REFERENCE_HINT_KEYWORDS if kw in lowered]
+    if not matched:
+        return "일반 프론트엔드 핵심 역량"
+    return ", ".join(matched[:3])
+
+
+def pick_track(seed: int) -> str:
+    # CS 70%, Frontend(실무) 30% 비율로 섞기
+    return "cs" if (seed % 10) < 7 else "frontend"
+
+
+def build_dynamic_question(date_key: str, reference_question: str) -> tuple[str, list[str], str, str]:
+    seed = stable_seed(date_key=date_key, reference_question=reference_question)
+    track = pick_track(seed)
+    topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
+    topic = topic_pool[seed % len(topic_pool)]
+    template = QUESTION_TEMPLATES[(seed // 7) % len(QUESTION_TEMPLATES)]
+    follow_up_start = (seed // 11) % len(FOLLOW_UP_TEMPLATES)
+
+    main_question = template.format(
+        scenario=topic["scenario"],
+        subject=topic["subject"],
+        tradeoff=topic["tradeoff"],
+    )
+    follow_ups = [
+        FOLLOW_UP_TEMPLATES[follow_up_start % len(FOLLOW_UP_TEMPLATES)],
+        FOLLOW_UP_TEMPLATES[(follow_up_start + 2) % len(FOLLOW_UP_TEMPLATES)],
+    ]
+    category = topic["category"]
+    return main_question, follow_ups, category, track
+
+
+def write_markdown(
+    output_dir: Path,
+    date_key: str,
+    question: str,
+    follow_ups: list[str],
+    category: str,
+    track: str,
+    source_url: str,
+    source_mode: str,
+    reference_question: str,
+    reference_hint: str,
+) -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    file_path = output_dir / f"{date_key}.md"
+    source_line = source_url if source_mode == "reference+generated" else "Generated from local interview topic bank"
+    reference_line = reference_question if reference_question else "참고 질문을 가져오지 못해 로컬 규칙으로 생성"
+    track_label = "CS" if track == "cs" else "Frontend"
+    content = (
+        f"# Frontend Daily Question ({date_key})\n\n"
+        "## Track\n"
+        f"- {track_label}\n\n"
+        "## Category\n"
+        f"- {category}\n\n"
+        "## Question\n"
+        f"{question}\n\n"
+        "## Follow-up\n"
+        f"1. {follow_ups[0]}\n"
+        f"2. {follow_ups[1]}\n\n"
+        "## Notes\n"
+        "- 답변은 PR 코멘트로 남기거나, 이 문서에 이어서 작성하세요.\n"
+        "- 팀 기준/경험을 근거로 답변하면 좋습니다.\n\n"
+        "## Reference Hint\n"
+        f"- {reference_hint}\n\n"
+        "## Reference Question\n"
+        f"- {reference_line}\n\n"
+        "## Source\n"
+        f"- {source_line}\n"
+    )
+    file_path.write_text(content, encoding="utf-8")
+    return file_path
+
+
+def set_github_output(file_path: Path, question: str, source_mode: str) -> None:
+    output_file = os.environ.get("GITHUB_OUTPUT")
+    if not output_file:
+        return
+    with open(output_file, "a", encoding="utf-8") as f:
+        f.write(f"file_path={file_path.as_posix()}\n")
+        f.write(f"question={question}\n")
+        f.write(f"source_mode={source_mode}\n")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--source-url",
+        default=os.environ.get(
+            "QUESTION_SOURCE_URL",
+            "https://www.maeil-mail.kr/question/mine/gentlemonster77@likelion.org",
+        ),
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="daily-frontend-questions",
+    )
+    parser.add_argument(
+        "--tz",
+        default="KST",
+        choices=["KST", "UTC"],
+    )
+    args = parser.parse_args()
+
+    now = datetime.now(KST if args.tz == "KST" else timezone.utc)
+    date_key = now.date().isoformat()
+
+    cookie = os.environ.get("QUESTION_SOURCE_COOKIE", "")
+    reference_question = ""
+    source_mode = "generated"
+
+    if args.source_url:
+        try:
+            reference_question = fetch_source_question(args.source_url, cookie)
+            if reference_question:
+                source_mode = "reference+generated"
+        except (HTTPError, URLError, TimeoutError, ValueError):
+            reference_question = ""
+            source_mode = "generated"
+
+    question, follow_ups, category, track = build_dynamic_question(
+        date_key=date_key,
+        reference_question=reference_question,
+    )
+    reference_hint = infer_reference_hint(reference_question)
+
+    file_path = write_markdown(
+        output_dir=Path(args.output_dir),
+        date_key=date_key,
+        question=question,
+        follow_ups=follow_ups,
+        category=category,
+        track=track,
+        source_url=args.source_url,
+        source_mode=source_mode,
+        reference_question=reference_question,
+        reference_hint=reference_hint,
+    )
+    set_github_output(file_path=file_path, question=question, source_mode=source_mode)
+
+    print(f"Generated: {file_path}")
+    print(f"Source mode: {source_mode}")
+    print(f"Track: {track}")
+    print(f"Category: {category}")
+    print(f"Question: {question}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
