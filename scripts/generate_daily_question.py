@@ -9,6 +9,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
+from urllib.parse import quote_plus
 from urllib.request import Request, urlopen
 
 KST = timezone(timedelta(hours=9))
@@ -243,23 +244,21 @@ def build_dynamic_question(date_key: str, reference_question: str) -> tuple[str,
     return main_question, follow_ups, category, track
 
 
-def extract_response_text(response_payload: dict) -> str:
-    text = response_payload.get("output_text")
-    if isinstance(text, str) and text.strip():
-        return text.strip()
-
-    outputs = response_payload.get("output", [])
-    for item in outputs:
-        if not isinstance(item, dict):
+def extract_gemini_text(response_payload: dict) -> str:
+    candidates = response_payload.get("candidates", [])
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
             continue
-        contents = item.get("content", [])
-        for content in contents:
-            if not isinstance(content, dict):
+        content = candidate.get("content", {})
+        if not isinstance(content, dict):
+            continue
+        parts = content.get("parts", [])
+        for part in parts:
+            if not isinstance(part, dict):
                 continue
-            if content.get("type") in {"output_text", "text"}:
-                value = content.get("text")
-                if isinstance(value, str) and value.strip():
-                    return value.strip()
+            value = part.get("text")
+            if isinstance(value, str) and value.strip():
+                return value.strip()
     return ""
 
 
@@ -287,7 +286,7 @@ def generate_ai_question(
     track: str,
     topic: dict,
     reference_question: str,
-    base_url: str = "https://api.openai.com/v1/responses",
+    base_url: str = "https://generativelanguage.googleapis.com/v1beta",
 ) -> tuple[str, list[str], str]:
     track_label = "CS" if track == "cs" else "Frontend"
     reference_line = reference_question if reference_question else "N/A"
@@ -307,25 +306,28 @@ def generate_ai_question(
         '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )
 
+    endpoint = f"{base_url}/models/{model}:generateContent?key={quote_plus(api_key)}"
     payload = {
-        "model": model,
-        "input": [
-            {
-                "role": "system",
-                "content": [{"type": "input_text", "text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
-            },
+        "system_instruction": {
+            "parts": [{"text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
+        },
+        "contents": [
             {
                 "role": "user",
-                "content": [{"type": "input_text", "text": prompt}],
-            },
+                "parts": [{"text": prompt}],
+            }
         ],
+        "generationConfig": {
+            "temperature": 0.7,
+            "maxOutputTokens": 600,
+            "responseMimeType": "application/json",
+        },
     }
 
     request = Request(
-        base_url,
+        endpoint,
         data=json.dumps(payload).encode("utf-8"),
         headers={
-            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         },
         method="POST",
@@ -339,9 +341,9 @@ def generate_ai_question(
             error_body = err.read().decode("utf-8", errors="replace")
         except Exception:
             error_body = ""
-        raise ValueError(f"OpenAI API HTTP {err.code}: {error_body or err.reason}") from err
+        raise ValueError(f"Gemini API HTTP {err.code}: {error_body or err.reason}") from err
 
-    raw_text = extract_response_text(response_data)
+    raw_text = extract_gemini_text(response_data)
     parsed = parse_ai_json(raw_text)
 
     question = sanitize_inline(str(parsed.get("question", "")))
@@ -483,26 +485,28 @@ def main() -> int:
     topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
     topic = topic_pool[seed % len(topic_pool)]
 
-    openai_api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    openai_model = os.environ.get("OPENAI_MODEL", "gpt-4.1-mini").strip()
-    openai_base_url = os.environ.get("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses").strip()
+    gemini_api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash").strip()
+    gemini_base_url = os.environ.get(
+        "GEMINI_API_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"
+    ).strip()
     use_ai = args.generation_mode == "always" or (
-        args.generation_mode == "auto" and bool(openai_api_key)
+        args.generation_mode == "auto" and bool(gemini_api_key)
     )
 
-    if use_ai and not openai_api_key and args.generation_mode == "always":
-        raise RuntimeError("QUESTION_GENERATION_MODE=always requires OPENAI_API_KEY")
+    if use_ai and not gemini_api_key and args.generation_mode == "always":
+        raise RuntimeError("QUESTION_GENERATION_MODE=always requires GEMINI_API_KEY")
 
-    if use_ai and openai_api_key:
+    if use_ai and gemini_api_key:
         try:
             question, follow_ups, category = generate_ai_question(
-                api_key=openai_api_key,
-                model=openai_model,
+                api_key=gemini_api_key,
+                model=gemini_model,
                 date_key=date_key,
                 track=track,
                 topic=topic,
                 reference_question=reference_question,
-                base_url=openai_base_url,
+                base_url=gemini_base_url,
             )
             source_mode = "ai+reference" if reference_question else "ai"
         except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError) as err:

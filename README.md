@@ -13,7 +13,7 @@
 - 생성 질문은 `CS`와 `Frontend(실무)` 트랙이 혼합됩니다(기본 비율: CS 70% / 실무 30%).
 - PR 제목은 당일 기술 질문으로 생성되고, PR 본문에는 트랙/카테고리/후속 질문 등 세부 정보가 포함됩니다.
 - 기본 동작은 AI 전용 생성입니다(`QUESTION_GENERATION_MODE=always`).
-- `OPENAI_API_KEY`가 없거나 AI 생성이 실패하면 워크플로가 실패합니다.
+- `GEMINI_API_KEY`가 없거나 AI 생성이 실패하면 워크플로가 실패합니다.
 
 ## Workflow file
 
@@ -29,13 +29,13 @@
 - `QUESTION_GENERATION_MODE`
   - `auto` | `always` | `never`
   - 기본값: `always`
-- `OPENAI_MODEL` (선택)
-  - 기본값: `gpt-4.1-mini`
+- `GEMINI_MODEL` (선택)
+  - 기본값: `gemini-1.5-flash`
 
 2. `Settings > Secrets and variables > Actions > Secrets`
 - `QUESTION_SOURCE_COOKIE` (선택)
   - 로그인/인증이 필요한 페이지에서 질문 추출 시 쿠키 문자열 사용
-- `OPENAI_API_KEY` (선택)
+- `GEMINI_API_KEY` (선택)
   - 설정 시 AI로 질문 생성
 
 ## Manual run

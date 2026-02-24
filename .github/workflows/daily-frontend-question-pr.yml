@@ -28,8 +28,8 @@ jobs:
           QUESTION_SOURCE_URL: ${{ vars.QUESTION_SOURCE_URL || 'https://www.maeil-mail.kr/question/mine/gentlemonster77@likelion.org?category=frontend' }}
           QUESTION_SOURCE_COOKIE: ${{ secrets.QUESTION_SOURCE_COOKIE || '' }}
           QUESTION_GENERATION_MODE: ${{ vars.QUESTION_GENERATION_MODE || 'always' }}
-          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || '' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-1.5-flash' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || '' }}
         run: python scripts/generate_daily_question.py
 
       - name: Create Pull Request
