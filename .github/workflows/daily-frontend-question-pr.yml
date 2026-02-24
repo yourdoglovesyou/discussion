@@ -38,6 +38,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.PR_BOT_TOKEN || github.token }}
           add-paths: daily-frontend-questions
           commit-message: "chore: add daily frontend question (${{ github.run_id }})"
           branch: "bot/daily-frontend-question"
@@ -67,6 +68,6 @@ jobs:
             automated
             frontend-question
           reviewers: |
-            @prgmr99
-            @klmhyeonwoo
+            prgmr99
+            klmhyeonwoo
           delete-branch: true

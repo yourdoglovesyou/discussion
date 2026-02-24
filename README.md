@@ -45,6 +45,9 @@
   - 로그인/인증이 필요한 페이지에서 질문 추출 시 쿠키 문자열 사용
 - `GEMINI_API_KEY` (선택)
   - 설정 시 AI로 질문 생성
+- `PR_BOT_TOKEN` (선택, 권장)
+  - reviewer 지정 안정성을 위해 `create-pull-request`에서 우선 사용
+  - 권한: private repo 기준 `repo` (organization이면 `read:org` 추가 권장)
 
 ## Manual run
 
