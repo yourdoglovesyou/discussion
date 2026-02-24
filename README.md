@@ -12,7 +12,8 @@
 - `QUESTION_SOURCE_URL`의 질문은 "참고 질문"으로만 사용하고, 최종 질문은 동적으로 생성합니다.
 - 생성 질문은 `CS`와 `Frontend(실무)` 트랙이 혼합됩니다(기본 비율: CS 70% / 실무 30%).
 - PR 제목은 당일 기술 질문으로 생성되고, PR 본문에는 트랙/카테고리/후속 질문 등 세부 정보가 포함됩니다.
-- `OPENAI_API_KEY`가 있으면 AI로 질문을 생성하고, 없거나 실패하면 로컬 규칙으로 fallback 됩니다.
+- 기본 동작은 AI 전용 생성입니다(`QUESTION_GENERATION_MODE=always`).
+- `OPENAI_API_KEY`가 없거나 AI 생성이 실패하면 워크플로가 실패합니다.
 
 ## Workflow file
 
@@ -27,7 +28,7 @@
     - `https://www.maeil-mail.kr/question/mine/gentlemonster77@likelion.org?category=frontend`
 - `QUESTION_GENERATION_MODE`
   - `auto` | `always` | `never`
-  - 기본값: `auto`
+  - 기본값: `always`
 - `OPENAI_MODEL` (선택)
   - 기본값: `gpt-4.1-mini`
 
@@ -44,6 +45,6 @@
 ## Notes
 
 - 소스 URL 파싱 실패 시에도 질문 생성은 계속됩니다.
-- AI 생성 실패 시 로컬 규칙 기반 질문으로 자동 fallback 됩니다.
+- `always` 모드에서는 AI 생성 실패 시 fallback 없이 실패합니다.
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`

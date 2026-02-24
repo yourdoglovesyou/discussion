@@ -452,7 +452,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--generation-mode",
-        default=os.environ.get("QUESTION_GENERATION_MODE", "auto"),
+        default=os.environ.get("QUESTION_GENERATION_MODE", "always"),
         choices=["auto", "always", "never"],
     )
     args = parser.parse_args()
@@ -497,7 +497,9 @@ def main() -> int:
                 base_url=openai_base_url,
             )
             source_mode = "ai+reference" if reference_question else "ai"
-        except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError) as err:
+            if args.generation_mode == "always":
+                raise RuntimeError(f"AI generation failed in always mode: {err}") from err
             question, follow_ups, category, track = build_dynamic_question(
                 date_key=date_key,
                 reference_question=reference_question,
