@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import html
+import json
 import os
 import re
 import sys
@@ -127,16 +128,16 @@ CS_INTERVIEW_TOPICS = [
 ]
 
 QUESTION_TEMPLATES = [
-    "네카라쿠배 기술면접 맥락에서, `{scenario}` 상황이라면 프론트엔드에서 `{subject}`를 어떤 기준으로 설계하시겠어요? 특히 `{tradeoff}`를 근거와 함께 설명해 주세요.",
-    "대규모 트래픽을 가정한 네카라쿠배 스타일 질문입니다. `{scenario}`에서 `{subject}` 문제를 해결할 때, 우선순위와 측정 지표를 어떻게 잡을지 설명해 주세요.",
-    "실무 중심 질문입니다. `{scenario}` 기능을 맡았을 때 `{subject}` 관점에서 아키텍처 결정을 어떻게 내릴지, 선택하지 않은 대안까지 비교해 주세요.",
+    "`{scenario}` 상황에서 `{subject}`를 어떻게 설계하면 좋을까요? `{tradeoff}` 기준으로 설명해 주세요.",
+    "`{scenario}`에서 `{subject}`를 개선하려면 어떤 순서로 접근하시겠어요?",
+    "`{scenario}` 기능을 구현할 때 `{subject}` 관점에서 어떤 선택을 하시겠어요?",
 ]
 
 FOLLOW_UP_TEMPLATES = [
-    "장애가 발생했을 때 가장 먼저 확인할 관측 지표 2가지는 무엇인가요?",
-    "팀 컨벤션으로 강제하고 싶은 규칙 1가지를 제안해 주세요.",
-    "이 결정을 검증하기 위한 테스트 전략(Unit/Integration/E2E)은 어떻게 가져가시겠어요?",
-    "기술 부채를 최소화하기 위해 초기 설계에서 어떤 타협을 하시겠어요?",
+    "가장 먼저 점검할 지표 2가지는 무엇인가요?",
+    "팀에서 공통 규칙으로 정하고 싶은 기준 1가지는 무엇인가요?",
+    "이 선택을 확인하기 위한 테스트 방법은 어떻게 가져가면 좋을까요?",
+    "초기 구현에서 꼭 챙길 최소 기준은 무엇인가요?",
 ]
 
 REFERENCE_HINT_KEYWORDS = [
@@ -240,6 +241,109 @@ def build_dynamic_question(date_key: str, reference_question: str) -> tuple[str,
     ]
     category = topic["category"]
     return main_question, follow_ups, category, track
+
+
+def extract_response_text(response_payload: dict) -> str:
+    text = response_payload.get("output_text")
+    if isinstance(text, str) and text.strip():
+        return text.strip()
+
+    outputs = response_payload.get("output", [])
+    for item in outputs:
+        if not isinstance(item, dict):
+            continue
+        contents = item.get("content", [])
+        for content in contents:
+            if not isinstance(content, dict):
+                continue
+            if content.get("type") in {"output_text", "text"}:
+                value = content.get("text")
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+    return ""
+
+
+def parse_ai_json(text: str) -> dict:
+    try:
+        parsed = json.loads(text)
+        if isinstance(parsed, dict):
+            return parsed
+    except json.JSONDecodeError:
+        pass
+
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if not match:
+        raise ValueError("AI output does not include JSON object")
+    parsed = json.loads(match.group(0))
+    if not isinstance(parsed, dict):
+        raise ValueError("AI JSON is not an object")
+    return parsed
+
+
+def generate_ai_question(
+    api_key: str,
+    model: str,
+    date_key: str,
+    track: str,
+    topic: dict,
+    reference_question: str,
+    base_url: str = "https://api.openai.com/v1/responses",
+) -> tuple[str, list[str], str]:
+    track_label = "CS" if track == "cs" else "Frontend"
+    reference_line = reference_question if reference_question else "N/A"
+    prompt = (
+        "다음 규칙으로 한국어 기술 질문을 만들어 주세요.\n"
+        f"- 날짜: {date_key}\n"
+        f"- 트랙: {track_label}\n"
+        f"- 카테고리 힌트: {topic['category']}\n"
+        f"- 시나리오 힌트: {topic['scenario']}\n"
+        f"- 주제 힌트: {topic['subject']}\n"
+        f"- 트레이드오프 힌트: {topic['tradeoff']}\n"
+        f"- 참고 질문: {reference_line}\n"
+        "- 질문 톤은 가볍고 짧게 작성해 주세요.\n"
+        "- 면접/네카라쿠배/대규모 트래픽 같은 표현은 쓰지 마세요.\n"
+        "- follow-up 2개는 짧고 실용적으로 작성해 주세요.\n"
+        "- 반드시 JSON만 반환하세요. 코드블록 금지.\n"
+        '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
+    )
+
+    payload = {
+        "model": model,
+        "input": [
+            {
+                "role": "system",
+                "content": [{"type": "text", "text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
+            },
+            {
+                "role": "user",
+                "content": [{"type": "text", "text": prompt}],
+            },
+        ],
+    }
+
+    request = Request(
+        base_url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    with urlopen(request, timeout=30) as response:
+        response_data = json.loads(response.read().decode("utf-8"))
+
+    raw_text = extract_response_text(response_data)
+    parsed = parse_ai_json(raw_text)
+
+    question = sanitize_inline(str(parsed.get("question", "")))
+    follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
+    follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
+    category = sanitize_inline(str(parsed.get("category", topic["category"])))
+
+    if not question or not follow_up_1 or not follow_up_2:
+        raise ValueError("AI output is missing required fields")
+    return question, [follow_up_1, follow_up_2], category
 
 
 def sanitize_inline(text: str) -> str:
@@ -346,6 +450,11 @@ def main() -> int:
         default="KST",
         choices=["KST", "UTC"],
     )
+    parser.add_argument(
+        "--generation-mode",
+        default=os.environ.get("QUESTION_GENERATION_MODE", "auto"),
+        choices=["auto", "always", "never"],
+    )
     args = parser.parse_args()
 
     now = datetime.now(KST if args.tz == "KST" else timezone.utc)
@@ -358,16 +467,49 @@ def main() -> int:
     if args.source_url:
         try:
             reference_question = fetch_source_question(args.source_url, cookie)
-            if reference_question:
-                source_mode = "reference+generated"
         except (HTTPError, URLError, TimeoutError, ValueError):
             reference_question = ""
-            source_mode = "generated"
 
-    question, follow_ups, category, track = build_dynamic_question(
-        date_key=date_key,
-        reference_question=reference_question,
+    seed = stable_seed(date_key=date_key, reference_question=reference_question)
+    track = pick_track(seed)
+    topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
+    topic = topic_pool[seed % len(topic_pool)]
+
+    openai_api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    openai_model = os.environ.get("OPENAI_MODEL", "gpt-4.1-mini").strip()
+    openai_base_url = os.environ.get("OPENAI_RESPONSES_URL", "https://api.openai.com/v1/responses").strip()
+    use_ai = args.generation_mode == "always" or (
+        args.generation_mode == "auto" and bool(openai_api_key)
     )
+
+    if use_ai and not openai_api_key and args.generation_mode == "always":
+        raise RuntimeError("QUESTION_GENERATION_MODE=always requires OPENAI_API_KEY")
+
+    if use_ai and openai_api_key:
+        try:
+            question, follow_ups, category = generate_ai_question(
+                api_key=openai_api_key,
+                model=openai_model,
+                date_key=date_key,
+                track=track,
+                topic=topic,
+                reference_question=reference_question,
+                base_url=openai_base_url,
+            )
+            source_mode = "ai+reference" if reference_question else "ai"
+        except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError):
+            question, follow_ups, category, track = build_dynamic_question(
+                date_key=date_key,
+                reference_question=reference_question,
+            )
+            source_mode = "reference+generated" if reference_question else "generated"
+    else:
+        question, follow_ups, category, track = build_dynamic_question(
+            date_key=date_key,
+            reference_question=reference_question,
+        )
+        source_mode = "reference+generated" if reference_question else "generated"
+
     reference_hint = infer_reference_hint(reference_question)
 
     file_path = write_markdown(
