@@ -36,16 +36,29 @@ jobs:
           commit-message: "chore: add daily frontend question (${{ github.run_id }})"
           branch: "bot/daily-frontend-question"
           branch-suffix: timestamp
-          title: "chore: frontend daily question - ${{ steps.generate.outputs.file_path }}"
+          title: "${{ steps.generate.outputs.pr_title }}"
           body: |
-            Daily frontend question generated automatically.
+            ## Today's Technical Question
+
+            ${{ steps.generate.outputs.question }}
+
+            ## Detail
+
+            - Track: `${{ steps.generate.outputs.track }}`
+            - Category: `${{ steps.generate.outputs.category }}`
+            - Follow-up 1: ${{ steps.generate.outputs.follow_up_1 }}
+            - Follow-up 2: ${{ steps.generate.outputs.follow_up_2 }}
+            - Reference hint: `${{ steps.generate.outputs.reference_hint }}`
+            - Reference question: `${{ steps.generate.outputs.reference_question }}`
 
             - File: `${{ steps.generate.outputs.file_path }}`
             - Source mode: `${{ steps.generate.outputs.source_mode }}`
-            - Question: `${{ steps.generate.outputs.question }}`
 
             This PR was created by GitHub Actions.
           labels: |
             automated
             frontend-question
+          reviewers: |
+            prgmr99
+            klmhyeonwoo
           delete-branch: true

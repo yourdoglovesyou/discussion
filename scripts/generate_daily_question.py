@@ -242,6 +242,20 @@ def build_dynamic_question(date_key: str, reference_question: str) -> tuple[str,
     return main_question, follow_ups, category, track
 
 
+def sanitize_inline(text: str) -> str:
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def build_pr_title(question: str) -> str:
+    plain = sanitize_inline(question).replace("`", "")
+    prefix = "chore: daily tech question - "
+    max_len = 180
+    allowed = max_len - len(prefix)
+    if len(plain) > allowed:
+        plain = plain[: allowed - 3].rstrip() + "..."
+    return f"{prefix}{plain}"
+
+
 def write_markdown(
     output_dir: Path,
     date_key: str,
@@ -284,14 +298,34 @@ def write_markdown(
     return file_path
 
 
-def set_github_output(file_path: Path, question: str, source_mode: str) -> None:
+def set_github_output_extended(
+    file_path: Path,
+    question: str,
+    source_mode: str,
+    track: str,
+    category: str,
+    follow_ups: list[str],
+    reference_hint: str,
+    reference_question: str,
+) -> None:
     output_file = os.environ.get("GITHUB_OUTPUT")
     if not output_file:
         return
+
+    track_label = "CS" if track == "cs" else "Frontend"
+    pr_title = build_pr_title(question)
+
     with open(output_file, "a", encoding="utf-8") as f:
         f.write(f"file_path={file_path.as_posix()}\n")
-        f.write(f"question={question}\n")
-        f.write(f"source_mode={source_mode}\n")
+        f.write(f"source_mode={sanitize_inline(source_mode)}\n")
+        f.write(f"question={sanitize_inline(question)}\n")
+        f.write(f"track={track_label}\n")
+        f.write(f"category={sanitize_inline(category)}\n")
+        f.write(f"follow_up_1={sanitize_inline(follow_ups[0])}\n")
+        f.write(f"follow_up_2={sanitize_inline(follow_ups[1])}\n")
+        f.write(f"reference_hint={sanitize_inline(reference_hint)}\n")
+        f.write(f"reference_question={sanitize_inline(reference_question) if reference_question else 'N/A'}\n")
+        f.write(f"pr_title={pr_title}\n")
 
 
 def main() -> int:
@@ -348,7 +382,16 @@ def main() -> int:
         reference_question=reference_question,
         reference_hint=reference_hint,
     )
-    set_github_output(file_path=file_path, question=question, source_mode=source_mode)
+    set_github_output_extended(
+        file_path=file_path,
+        question=question,
+        source_mode=source_mode,
+        track=track,
+        category=category,
+        follow_ups=follow_ups,
+        reference_hint=reference_hint,
+        reference_question=reference_question,
+    )
 
     print(f"Generated: {file_path}")
     print(f"Source mode: {source_mode}")
