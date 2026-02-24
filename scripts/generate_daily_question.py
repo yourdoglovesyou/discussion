@@ -17,64 +17,76 @@ KST = timezone(timedelta(hours=9))
 
 FRONTEND_INTERVIEW_TOPICS = [
     {
-        "category": "React Basics",
-        "subject": "key를 왜 써야 하는지와 잘못 썼을 때 문제",
-        "scenario": "리스트를 렌더링하고 항목 순서가 자주 바뀌는 화면",
-        "tradeoff": "index를 key로 쓰는 경우의 위험",
+        "category": "React",
+        "subject": "React에서 key가 왜 필요한지",
+        "scenario": "리스트 렌더링에서 항목 순서가 자주 바뀔 때",
+        "tradeoff": "index key 사용의 편의성과 상태 꼬임 위험",
     },
     {
-        "category": "React Hooks",
-        "subject": "useEffect dependency array 동작 원리",
-        "scenario": "API 호출과 상태 업데이트가 함께 있는 컴포넌트",
-        "tradeoff": "의존성 누락/과다 지정으로 생기는 버그",
+        "category": "React",
+        "subject": "useEffect cleanup이 필요한 이유",
+        "scenario": "이벤트 리스너/타이머/구독이 있는 컴포넌트",
+        "tradeoff": "구현 단순성과 메모리 누수 방지",
     },
     {
-        "category": "React Forms",
-        "subject": "controlled와 uncontrolled 컴포넌트 차이",
-        "scenario": "입력 폼 유효성 검사가 필요한 페이지",
-        "tradeoff": "구현 단순성 vs 상태 제어 용이성",
+        "category": "React",
+        "subject": "controlled와 uncontrolled input 차이",
+        "scenario": "폼 유효성 검사와 실시간 입력 처리",
+        "tradeoff": "코드 복잡도와 제어 가능성",
     },
     {
-        "category": "React State",
-        "subject": "state 끌어올리기(lifting state up)가 필요한 기준",
-        "scenario": "형제 컴포넌트 간 입력값을 동기화해야 하는 화면",
-        "tradeoff": "props drilling 증가와 구조 단순성의 균형",
+        "category": "Vue",
+        "subject": "Vue에서 ref와 reactive의 차이",
+        "scenario": "Composition API로 상태를 관리할 때",
+        "tradeoff": "가독성과 반응성 추적의 명확성",
     },
     {
-        "category": "TypeScript Basics",
-        "subject": "any와 unknown의 차이",
-        "scenario": "외부 API 응답 타입이 불확실한 상황",
-        "tradeoff": "빠른 개발 vs 타입 안정성",
+        "category": "Vue",
+        "subject": "computed와 watch의 차이",
+        "scenario": "파생 상태 계산과 부수효과 처리가 함께 필요할 때",
+        "tradeoff": "선언적 계산과 제어 로직 복잡도",
     },
     {
-        "category": "Rendering",
-        "subject": "React 렌더링 최적화에서 memo/useMemo/useCallback 차이",
-        "scenario": "불필요한 리렌더링이 발생하는 컴포넌트",
-        "tradeoff": "최적화 코드 복잡도 증가",
+        "category": "Vue",
+        "subject": "Vue 라이프사이클 훅(onMounted/onUnmounted) 사용 시점",
+        "scenario": "데이터 fetch와 리소스 정리가 필요한 컴포넌트",
+        "tradeoff": "빠른 구현과 안정적인 정리(cleanup)",
     },
     {
-        "category": "Accessibility",
-        "subject": "button과 div 클릭 핸들링의 접근성 차이",
-        "scenario": "커스텀 클릭 가능한 UI 컴포넌트를 만들 때",
-        "tradeoff": "디자인 자유도와 시맨틱/키보드 접근성",
+        "category": "TypeScript",
+        "subject": "type과 interface 차이",
+        "scenario": "컴포넌트 props 타입을 설계할 때",
+        "tradeoff": "확장성/표현력과 팀 컨벤션 일관성",
     },
     {
-        "category": "Testing Basics",
-        "subject": "mock과 stub의 차이",
-        "scenario": "컴포넌트 테스트에서 API 호출을 대체할 때",
-        "tradeoff": "테스트 신뢰도와 테스트 작성 난이도",
+        "category": "TypeScript",
+        "subject": "any와 unknown 차이",
+        "scenario": "외부 API 응답 타입이 불확실한 코드",
+        "tradeoff": "개발 속도와 타입 안정성",
     },
     {
-        "category": "Browser Basics",
-        "subject": "localStorage/sessionStorage/cookie 차이",
-        "scenario": "로그인 상태와 사용자 설정값 저장이 필요한 상황",
-        "tradeoff": "보안/만료 정책/용량 제한의 차이",
+        "category": "TypeScript",
+        "subject": "제네릭을 써야 하는 경우",
+        "scenario": "재사용 가능한 훅/유틸 함수를 만들 때",
+        "tradeoff": "추상화 수준과 코드 복잡도",
     },
     {
-        "category": "HTTP Basics",
-        "subject": "CORS와 preflight 요청이 발생하는 이유",
-        "scenario": "다른 도메인의 API를 브라우저에서 호출할 때",
-        "tradeoff": "보안 정책 강화와 개발 편의성",
+        "category": "Browser Architecture",
+        "subject": "Critical Rendering Path(CRP)의 단계",
+        "scenario": "초기 렌더링이 느린 웹 페이지",
+        "tradeoff": "초기 로딩 최적화와 구현 복잡도",
+    },
+    {
+        "category": "Browser Architecture",
+        "subject": "Reflow/Repaint/Composite 차이",
+        "scenario": "애니메이션에서 프레임 드랍이 발생할 때",
+        "tradeoff": "시각 효과와 렌더링 비용",
+    },
+    {
+        "category": "Browser Architecture",
+        "subject": "브라우저 저장소(cookie/localStorage/sessionStorage) 차이",
+        "scenario": "인증 정보와 사용자 설정을 분리 저장할 때",
+        "tradeoff": "보안, 용량, 만료/전송 정책 차이",
     },
 ]
 
@@ -98,26 +110,32 @@ CS_INTERVIEW_TOPICS = [
         "tradeoff": "사용자 기대 동작과 이벤트 흐름 제어",
     },
     {
-        "category": "JavaScript Core",
-        "subject": "this 바인딩 규칙",
+        "category": "JavaScript",
+        "subject": "this 바인딩 규칙(call/apply/bind 포함)",
         "scenario": "콜백 함수 안에서 this가 의도와 다르게 동작할 때",
         "tradeoff": "함수 표현식/화살표 함수 선택 기준",
     },
     {
-        "category": "JavaScript Core",
+        "category": "JavaScript",
         "subject": "closure가 무엇인지와 사용 사례",
         "scenario": "함수 실행이 끝난 뒤에도 내부 변수를 유지해야 할 때",
         "tradeoff": "캡슐화 이점과 메모리 관리 주의점",
     },
     {
-        "category": "JavaScript Core",
+        "category": "JavaScript",
         "subject": "var, let, const 차이와 호이스팅",
         "scenario": "스코프 버그가 나는 코드를 디버깅할 때",
         "tradeoff": "재할당 가능성/스코프 안정성",
     },
     {
+        "category": "JavaScript",
+        "subject": "Promise.all / Promise.allSettled / Promise.race 차이",
+        "scenario": "여러 비동기 요청을 함께 처리할 때",
+        "tradeoff": "실패 처리 방식과 응답 완료 전략",
+    },
+    {
         "category": "Async",
-        "subject": "Promise, async/await, then/catch 흐름 차이",
+        "subject": "async/await와 then/catch 차이",
         "scenario": "연속 API 호출에서 에러 처리를 통일해야 할 때",
         "tradeoff": "가독성과 제어 유연성",
     },
@@ -134,10 +152,22 @@ CS_INTERVIEW_TOPICS = [
         "tradeoff": "응답성 vs 호출 횟수 감소",
     },
     {
-        "category": "Browser Rendering",
-        "subject": "Reflow, Repaint, Composite 차이",
-        "scenario": "애니메이션 때문에 화면이 끊길 때",
-        "tradeoff": "시각 품질과 렌더링 비용",
+        "category": "HTTP",
+        "subject": "CORS와 preflight 요청이 발생하는 이유",
+        "scenario": "프론트엔드에서 다른 도메인의 API를 호출할 때",
+        "tradeoff": "보안 정책과 개발 편의성",
+    },
+    {
+        "category": "HTTP",
+        "subject": "Cache-Control, ETag, Last-Modified 차이",
+        "scenario": "브라우저 캐시 전략을 설계할 때",
+        "tradeoff": "최신성 보장과 네트워크 절감",
+    },
+    {
+        "category": "Browser Architecture",
+        "subject": "싱글 스레드에서 자바스크립트가 동시성을 다루는 방식",
+        "scenario": "UI 이벤트와 비동기 작업이 동시에 많은 상황",
+        "tradeoff": "단순한 실행 모델과 블로킹 리스크",
     },
     {
         "category": "Web Security",
@@ -408,10 +438,11 @@ def generate_ai_question(
         f"- 트레이드오프 힌트: {topic['tradeoff']}\n"
         f"- 참고 질문: {reference_line}\n"
         "- 프론트엔드 면접 기출 CS(기초 개념) 스타일로 작성해 주세요.\n"
+        "- 주제 범위는 JavaScript, React, Vue, TypeScript, Browser Architecture, Web API로 제한해 주세요.\n"
         "- 시스템 디자인/대규모 트래픽/장애 대응/인프라 운영 주제는 제외해 주세요.\n"
         "- 질문은 짧고 명확하게, 그리고 `주제 힌트` 문구를 질문 본문에 그대로 포함해 주세요.\n"
         "- follow-up 2개는 기초 개념 확인형으로 짧게 작성해 주세요.\n"
-        "- 예시 스타일: event.target vs event.currentTarget, debounce vs throttle, var/let/const 차이\n"
+        "- 예시 스타일: event.target vs event.currentTarget, debounce vs throttle, React key, Vue computed vs watch, any vs unknown\n"
         "- 반드시 JSON만 반환하세요. 코드블록 금지.\n"
         '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )

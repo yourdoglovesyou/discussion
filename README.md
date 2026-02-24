@@ -2,7 +2,8 @@
 
 매일 프론트엔드 기술 질문을 파일로 생성하고, 해당 변경을 PR로 올리는 GitHub Actions 설정입니다.
 질문은 프론트엔드 면접 기출 CS(기초 개념) 스타일로 동적 생성됩니다.
-예: `event.target vs event.currentTarget`, `debounce vs throttle`, `var/let/const 차이`
+범위: JavaScript, React, Vue, TypeScript, Browser Architecture
+예: `event.target vs event.currentTarget`, `debounce vs throttle`, `React key`, `Vue computed vs watch`
 
 ## What it does
 
