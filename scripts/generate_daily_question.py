@@ -312,11 +312,11 @@ def generate_ai_question(
         "input": [
             {
                 "role": "system",
-                "content": [{"type": "text", "text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
+                "content": [{"type": "input_text", "text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
             },
             {
                 "role": "user",
-                "content": [{"type": "text", "text": prompt}],
+                "content": [{"type": "input_text", "text": prompt}],
             },
         ],
     }
@@ -330,8 +330,16 @@ def generate_ai_question(
         },
         method="POST",
     )
-    with urlopen(request, timeout=30) as response:
-        response_data = json.loads(response.read().decode("utf-8"))
+    try:
+        with urlopen(request, timeout=30) as response:
+            response_data = json.loads(response.read().decode("utf-8"))
+    except HTTPError as err:
+        error_body = ""
+        try:
+            error_body = err.read().decode("utf-8", errors="replace")
+        except Exception:
+            error_body = ""
+        raise ValueError(f"OpenAI API HTTP {err.code}: {error_body or err.reason}") from err
 
     raw_text = extract_response_text(response_data)
     parsed = parse_ai_json(raw_text)
