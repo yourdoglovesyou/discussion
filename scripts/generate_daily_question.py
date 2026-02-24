@@ -313,7 +313,7 @@ def generate_ai_question(
         '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )
 
-    payload = {
+    base_payload = {
         "system_instruction": {
             "parts": [{"text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
         },
@@ -327,6 +327,16 @@ def generate_ai_question(
             "temperature": 0.7,
             "maxOutputTokens": 600,
             "responseMimeType": "application/json",
+            "responseSchema": {
+                "type": "OBJECT",
+                "properties": {
+                    "question": {"type": "STRING"},
+                    "follow_up_1": {"type": "STRING"},
+                    "follow_up_2": {"type": "STRING"},
+                    "category": {"type": "STRING"},
+                },
+                "required": ["question", "follow_up_1", "follow_up_2", "category"],
+            },
         },
     }
     requested_model = normalize_gemini_model(model)
@@ -346,39 +356,73 @@ def generate_ai_question(
     last_error = ""
     for candidate_model in unique_candidates:
         endpoint = f"{base_url}/models/{candidate_model}:generateContent?key={quote_plus(api_key)}"
-        request = Request(
-            endpoint,
-            data=json.dumps(payload).encode("utf-8"),
-            headers={
-                "Content-Type": "application/json",
-            },
-            method="POST",
-        )
-        try:
-            with urlopen(request, timeout=30) as response:
-                response_data = json.loads(response.read().decode("utf-8"))
-        except HTTPError as err:
-            error_body = ""
+        for attempt in range(1, 4):
+            payload = json.loads(json.dumps(base_payload))
+            if attempt >= 2:
+                # Retry 시 JSON 형식 요구를 더 강하게 줘서 비정형 응답을 줄인다.
+                payload["contents"][0]["parts"][0]["text"] += (
+                    "\n중요: 설명 문장 없이 JSON 객체만 반환하세요."
+                )
+                payload["generationConfig"]["temperature"] = 0.2
+
+            request = Request(
+                endpoint,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
             try:
-                error_body = err.read().decode("utf-8", errors="replace")
-            except Exception:
+                with urlopen(request, timeout=30) as response:
+                    response_data = json.loads(response.read().decode("utf-8"))
+            except HTTPError as err:
                 error_body = ""
-            last_error = f"Gemini API HTTP {err.code}: {error_body or err.reason}"
-            if err.code == 404:
+                try:
+                    error_body = err.read().decode("utf-8", errors="replace")
+                except Exception:
+                    error_body = ""
+                last_error = f"Gemini API HTTP {err.code}: {error_body or err.reason}"
+                if err.code == 404:
+                    break
+                if err.code in (429, 500, 503):
+                    continue
+                raise ValueError(last_error) from err
+
+            raw_text = extract_gemini_text(response_data)
+            if not raw_text:
+                prompt_feedback = response_data.get("promptFeedback", {})
+                finish_reason = ""
+                candidates_resp = response_data.get("candidates", [])
+                if candidates_resp and isinstance(candidates_resp[0], dict):
+                    finish_reason = str(candidates_resp[0].get("finishReason", ""))
+                last_error = (
+                    "Gemini response did not include text "
+                    f"(model={candidate_model}, attempt={attempt}, "
+                    f"finish_reason={finish_reason}, prompt_feedback={prompt_feedback})"
+                )
                 continue
-            raise ValueError(last_error) from err
 
-        raw_text = extract_gemini_text(response_data)
-        parsed = parse_ai_json(raw_text)
+            try:
+                parsed = parse_ai_json(raw_text)
+            except ValueError as err:
+                last_error = (
+                    f"AI output parse failed (model={candidate_model}, attempt={attempt}): {err}; "
+                    f"raw={raw_text[:300]}"
+                )
+                continue
 
-        question = sanitize_inline(str(parsed.get("question", "")))
-        follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
-        follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
-        category = sanitize_inline(str(parsed.get("category", topic["category"])))
+            question = sanitize_inline(str(parsed.get("question", "")))
+            follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
+            follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
+            category = sanitize_inline(str(parsed.get("category", topic["category"])))
 
-        if not question or not follow_up_1 or not follow_up_2:
-            raise ValueError("AI output is missing required fields")
-        return question, [follow_up_1, follow_up_2], category, candidate_model
+            if not question or not follow_up_1 or not follow_up_2:
+                last_error = (
+                    f"AI output missing fields (model={candidate_model}, attempt={attempt}): {parsed}"
+                )
+                continue
+            return question, [follow_up_1, follow_up_2], category, candidate_model
 
     raise ValueError(
         "No usable Gemini model for generateContent. "
