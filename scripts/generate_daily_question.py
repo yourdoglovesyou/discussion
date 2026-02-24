@@ -286,6 +286,12 @@ def normalize_gemini_model(model: str) -> str:
     return model
 
 
+def is_text_model_candidate(model_name: str) -> bool:
+    lowered = model_name.lower()
+    blocked_tokens = ["tts", "embedding", "image", "aqa"]
+    return not any(token in lowered for token in blocked_tokens)
+
+
 def build_base_url_candidates(base_url: str) -> list[str]:
     base_url = base_url.rstrip("/")
     candidates = [base_url]
@@ -329,7 +335,7 @@ def list_generate_content_models(api_key: str, base_url: str) -> tuple[list[str]
             if "generateContent" not in methods:
                 continue
             name = normalize_gemini_model(str(item.get("name", "")))
-            if name:
+            if name and is_text_model_candidate(name):
                 available.append(name)
         if available:
             flash_first = [m for m in available if "flash" in m.lower()]
@@ -410,7 +416,7 @@ def generate_ai_question(
     unique_candidates: list[str] = []
     for name in candidates:
         n = normalize_gemini_model(name)
-        if n and n not in unique_candidates:
+        if n and is_text_model_candidate(n) and n not in unique_candidates:
             unique_candidates.append(n)
 
     last_error = ""
@@ -446,7 +452,15 @@ def generate_ai_question(
                     f"Gemini API HTTP {err.code} "
                     f"(base={working_base_url}, model={candidate_model}): {error_body or err.reason}"
                 )
+                error_body_lower = (error_body or "").lower()
                 if err.code == 404:
+                    break
+                if err.code == 400 and (
+                    "response modalities" in error_body_lower
+                    or "accepts the following combination" in error_body_lower
+                    or "invalid_argument" in error_body_lower
+                ):
+                    # 모델별 입력/출력 제약(예: AUDIO 전용)은 다음 모델로 넘어간다.
                     break
                 if err.code in (429, 500, 503):
                     continue
