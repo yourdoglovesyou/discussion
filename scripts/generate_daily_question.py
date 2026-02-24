@@ -178,9 +178,9 @@ CS_INTERVIEW_TOPICS = [
 ]
 
 QUESTION_TEMPLATES = [
-    "`{subject}`의 차이/동작을 설명해 주세요. (`{scenario}`)",
-    "`{subject}`를 면접에서 답한다면 핵심 포인트를 어떻게 설명하시겠어요? (`{scenario}`)",
-    "`{subject}`에서 자주 나오는 함정은 무엇이고, `{tradeoff}` 관점에서 어떻게 정리할 수 있을까요?",
+    "`{subject}` 차이를 설명해 주세요.",
+    "`{subject}` 핵심 개념을 짧게 설명해 주세요.",
+    "`{subject}` 면접 답변 포인트는 무엇인가요?",
 ]
 
 FOLLOW_UP_TEMPLATES = [
@@ -336,6 +336,20 @@ def parse_ai_json(text: str) -> dict:
     return parsed
 
 
+def compact_question(question: str, subject: str) -> str:
+    q = sanitize_inline(question)
+    q = re.sub(r"주제\s*힌트\s*:\s*", "", q, flags=re.IGNORECASE)
+    q = q.strip(" -")
+
+    too_long = len(q) > 90
+    noisy = any(token in q for token in ["트레이드오프", "관점", "상황에서", "설명하고, 각각"])
+    if q and not too_long and not noisy:
+        return q
+
+    subject_clean = sanitize_inline(subject).strip("` ")
+    return f"`{subject_clean}` 차이를 설명해 주세요."
+
+
 def normalize_gemini_model(model: str) -> str:
     model = model.strip()
     if model.startswith("models/"):
@@ -440,7 +454,10 @@ def generate_ai_question(
         "- 프론트엔드 면접 기출 CS(기초 개념) 스타일로 작성해 주세요.\n"
         "- 주제 범위는 JavaScript, React, Vue, TypeScript, Browser Architecture, Web API로 제한해 주세요.\n"
         "- 시스템 디자인/대규모 트래픽/장애 대응/인프라 운영 주제는 제외해 주세요.\n"
-        "- 질문은 짧고 명확하게, 그리고 `주제 힌트` 문구를 질문 본문에 그대로 포함해 주세요.\n"
+        "- 질문은 최대 한 문장, 45자 내외로 짧고 명확하게 작성해 주세요.\n"
+        "- 배경 설명(예: 링크가 포함된 카드..., 트레이드오프 관점...)은 질문 본문에 넣지 마세요.\n"
+        "- `주제 힌트` 문구를 그대로 포함해 간단한 질문으로 만들어 주세요.\n"
+        "- `주제 힌트:` 같은 접두어는 출력하지 마세요.\n"
         "- follow-up 2개는 기초 개념 확인형으로 짧게 작성해 주세요.\n"
         "- 예시 스타일: event.target vs event.currentTarget, debounce vs throttle, React key, Vue computed vs watch, any vs unknown\n"
         "- 반드시 JSON만 반환하세요. 코드블록 금지.\n"
@@ -573,7 +590,7 @@ def generate_ai_question(
                 )
                 continue
 
-            question = sanitize_inline(str(parsed.get("question", "")))
+            question = compact_question(str(parsed.get("question", "")), topic["subject"])
             follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
             follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
             category = sanitize_inline(str(parsed.get("category", topic["category"])))
