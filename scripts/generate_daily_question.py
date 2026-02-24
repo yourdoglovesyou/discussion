@@ -279,6 +279,13 @@ def parse_ai_json(text: str) -> dict:
     return parsed
 
 
+def normalize_gemini_model(model: str) -> str:
+    model = model.strip()
+    if model.startswith("models/"):
+        return model.split("/", 1)[1]
+    return model
+
+
 def generate_ai_question(
     api_key: str,
     model: str,
@@ -287,7 +294,7 @@ def generate_ai_question(
     topic: dict,
     reference_question: str,
     base_url: str = "https://generativelanguage.googleapis.com/v1beta",
-) -> tuple[str, list[str], str]:
+) -> tuple[str, list[str], str, str]:
     track_label = "CS" if track == "cs" else "Frontend"
     reference_line = reference_question if reference_question else "N/A"
     prompt = (
@@ -306,7 +313,6 @@ def generate_ai_question(
         '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )
 
-    endpoint = f"{base_url}/models/{model}:generateContent?key={quote_plus(api_key)}"
     payload = {
         "system_instruction": {
             "parts": [{"text": "당신은 프론트엔드 데일리 질문 생성기입니다."}],
@@ -323,37 +329,61 @@ def generate_ai_question(
             "responseMimeType": "application/json",
         },
     }
+    requested_model = normalize_gemini_model(model)
+    candidates: list[str] = [
+        requested_model,
+        "gemini-2.5-flash",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash",
+        "gemini-1.5-flash-latest",
+    ]
+    unique_candidates: list[str] = []
+    for name in candidates:
+        n = normalize_gemini_model(name)
+        if n and n not in unique_candidates:
+            unique_candidates.append(n)
 
-    request = Request(
-        endpoint,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-    try:
-        with urlopen(request, timeout=30) as response:
-            response_data = json.loads(response.read().decode("utf-8"))
-    except HTTPError as err:
-        error_body = ""
+    last_error = ""
+    for candidate_model in unique_candidates:
+        endpoint = f"{base_url}/models/{candidate_model}:generateContent?key={quote_plus(api_key)}"
+        request = Request(
+            endpoint,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
         try:
-            error_body = err.read().decode("utf-8", errors="replace")
-        except Exception:
+            with urlopen(request, timeout=30) as response:
+                response_data = json.loads(response.read().decode("utf-8"))
+        except HTTPError as err:
             error_body = ""
-        raise ValueError(f"Gemini API HTTP {err.code}: {error_body or err.reason}") from err
+            try:
+                error_body = err.read().decode("utf-8", errors="replace")
+            except Exception:
+                error_body = ""
+            last_error = f"Gemini API HTTP {err.code}: {error_body or err.reason}"
+            if err.code == 404:
+                continue
+            raise ValueError(last_error) from err
 
-    raw_text = extract_gemini_text(response_data)
-    parsed = parse_ai_json(raw_text)
+        raw_text = extract_gemini_text(response_data)
+        parsed = parse_ai_json(raw_text)
 
-    question = sanitize_inline(str(parsed.get("question", "")))
-    follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
-    follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
-    category = sanitize_inline(str(parsed.get("category", topic["category"])))
+        question = sanitize_inline(str(parsed.get("question", "")))
+        follow_up_1 = sanitize_inline(str(parsed.get("follow_up_1", "")))
+        follow_up_2 = sanitize_inline(str(parsed.get("follow_up_2", "")))
+        category = sanitize_inline(str(parsed.get("category", topic["category"])))
 
-    if not question or not follow_up_1 or not follow_up_2:
-        raise ValueError("AI output is missing required fields")
-    return question, [follow_up_1, follow_up_2], category
+        if not question or not follow_up_1 or not follow_up_2:
+            raise ValueError("AI output is missing required fields")
+        return question, [follow_up_1, follow_up_2], category, candidate_model
+
+    raise ValueError(
+        "No usable Gemini model for generateContent. "
+        f"tried={', '.join(unique_candidates)}; last_error={last_error}"
+    )
 
 
 def sanitize_inline(text: str) -> str:
@@ -486,7 +516,7 @@ def main() -> int:
     topic = topic_pool[seed % len(topic_pool)]
 
     gemini_api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-1.5-flash").strip()
+    gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
     gemini_base_url = os.environ.get(
         "GEMINI_API_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"
     ).strip()
@@ -498,8 +528,9 @@ def main() -> int:
         raise RuntimeError("QUESTION_GENERATION_MODE=always requires GEMINI_API_KEY")
 
     if use_ai and gemini_api_key:
+        used_ai_model = ""
         try:
-            question, follow_ups, category = generate_ai_question(
+            question, follow_ups, category, used_ai_model = generate_ai_question(
                 api_key=gemini_api_key,
                 model=gemini_model,
                 date_key=date_key,
@@ -551,6 +582,8 @@ def main() -> int:
 
     print(f"Generated: {file_path}")
     print(f"Source mode: {source_mode}")
+    if source_mode.startswith("ai"):
+        print(f"AI model: {used_ai_model}")
     print(f"Track: {track}")
     print(f"Category: {category}")
     print(f"Question: {question}")

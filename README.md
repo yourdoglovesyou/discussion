@@ -30,7 +30,7 @@
   - `auto` | `always` | `never`
   - 기본값: `always`
 - `GEMINI_MODEL` (선택)
-  - 기본값: `gemini-1.5-flash`
+  - 기본값: `gemini-2.5-flash`
 
 2. `Settings > Secrets and variables > Actions > Secrets`
 - `QUESTION_SOURCE_COOKIE` (선택)
@@ -46,5 +46,6 @@
 
 - 소스 URL 파싱 실패 시에도 질문 생성은 계속됩니다.
 - `always` 모드에서는 AI 생성 실패 시 fallback 없이 실패합니다.
+- 지정한 Gemini 모델이 404일 경우, 스크립트가 호환 모델 후보를 자동 재시도합니다.
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`
