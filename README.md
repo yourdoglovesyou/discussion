@@ -47,6 +47,7 @@
 - 소스 URL 파싱 실패 시에도 질문 생성은 계속됩니다.
 - `always` 모드에서는 AI 생성 실패 시 fallback 없이 실패합니다.
 - 지정한 Gemini 모델이 404일 경우, 스크립트가 호환 모델 후보를 자동 재시도합니다.
+- 계정에서 허용된 Gemini 모델을 `models.list`로 조회해, 사용 가능한 모델을 우선 선택합니다.
 - Gemini 응답이 JSON 형식이 아니거나 비어 있으면 동일 모델에서 재시도 후 다음 후보 모델로 넘어갑니다.
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`

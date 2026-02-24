@@ -286,6 +286,61 @@ def normalize_gemini_model(model: str) -> str:
     return model
 
 
+def build_base_url_candidates(base_url: str) -> list[str]:
+    base_url = base_url.rstrip("/")
+    candidates = [base_url]
+    if "/v1beta" in base_url:
+        candidates.append(base_url.replace("/v1beta", "/v1"))
+    elif "/v1" in base_url:
+        candidates.append(base_url.replace("/v1", "/v1beta"))
+    unique: list[str] = []
+    for c in candidates:
+        if c not in unique:
+            unique.append(c)
+    return unique
+
+
+def list_generate_content_models(api_key: str, base_url: str) -> tuple[list[str], str, str]:
+    last_error = ""
+    for base in build_base_url_candidates(base_url):
+        list_endpoint = f"{base}/models?key={quote_plus(api_key)}"
+        request = Request(list_endpoint, method="GET")
+        try:
+            with urlopen(request, timeout=30) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+        except HTTPError as err:
+            body = ""
+            try:
+                body = err.read().decode("utf-8", errors="replace")
+            except Exception:
+                body = ""
+            last_error = f"models.list HTTP {err.code} on {base}: {body or err.reason}"
+            continue
+        except (URLError, TimeoutError, json.JSONDecodeError) as err:
+            last_error = f"models.list error on {base}: {err}"
+            continue
+
+        models = payload.get("models", [])
+        available: list[str] = []
+        for item in models:
+            if not isinstance(item, dict):
+                continue
+            methods = item.get("supportedGenerationMethods", [])
+            if "generateContent" not in methods:
+                continue
+            name = normalize_gemini_model(str(item.get("name", "")))
+            if name:
+                available.append(name)
+        if available:
+            flash_first = [m for m in available if "flash" in m.lower()]
+            non_flash = [m for m in available if "flash" not in m.lower()]
+            ordered = flash_first + non_flash
+            return ordered[:10], base, ""
+        last_error = f"models.list returned 0 generateContent models on {base}"
+
+    return [], base_url.rstrip("/"), last_error
+
+
 def generate_ai_question(
     api_key: str,
     model: str,
@@ -340,8 +395,13 @@ def generate_ai_question(
         },
     }
     requested_model = normalize_gemini_model(model)
+    discovered_models, working_base_url, discovery_error = list_generate_content_models(
+        api_key=api_key,
+        base_url=base_url,
+    )
     candidates: list[str] = [
         requested_model,
+        *discovered_models,
         "gemini-2.5-flash",
         "gemini-2.0-flash",
         "gemini-1.5-flash",
@@ -355,7 +415,7 @@ def generate_ai_question(
 
     last_error = ""
     for candidate_model in unique_candidates:
-        endpoint = f"{base_url}/models/{candidate_model}:generateContent?key={quote_plus(api_key)}"
+        endpoint = f"{working_base_url}/models/{candidate_model}:generateContent?key={quote_plus(api_key)}"
         for attempt in range(1, 4):
             payload = json.loads(json.dumps(base_payload))
             if attempt >= 2:
@@ -382,7 +442,10 @@ def generate_ai_question(
                     error_body = err.read().decode("utf-8", errors="replace")
                 except Exception:
                     error_body = ""
-                last_error = f"Gemini API HTTP {err.code}: {error_body or err.reason}"
+                last_error = (
+                    f"Gemini API HTTP {err.code} "
+                    f"(base={working_base_url}, model={candidate_model}): {error_body or err.reason}"
+                )
                 if err.code == 404:
                     break
                 if err.code in (429, 500, 503):
@@ -426,7 +489,10 @@ def generate_ai_question(
 
     raise ValueError(
         "No usable Gemini model for generateContent. "
-        f"tried={', '.join(unique_candidates)}; last_error={last_error}"
+        f"base={working_base_url}; "
+        f"tried={', '.join(unique_candidates)}; "
+        f"model_discovery_error={discovery_error or 'N/A'}; "
+        f"last_error={last_error}"
     )
 
 
