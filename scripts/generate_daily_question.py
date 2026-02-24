@@ -222,8 +222,8 @@ def fetch_source_question(source_url: str, cookie: str = "") -> str:
     return question
 
 
-def stable_seed(date_key: str, reference_question: str) -> int:
-    seed_source = f"{date_key}|{reference_question}".encode("utf-8")
+def stable_seed(date_key: str, reference_question: str, variation_salt: str = "") -> int:
+    seed_source = f"{date_key}|{reference_question}|{variation_salt}".encode("utf-8")
     return int(hashlib.sha256(seed_source).hexdigest(), 16)
 
 
@@ -242,8 +242,16 @@ def pick_track(seed: int) -> str:
     return "cs" if (seed % 10) < 7 else "frontend"
 
 
-def build_dynamic_question(date_key: str, reference_question: str) -> tuple[str, list[str], str, str]:
-    seed = stable_seed(date_key=date_key, reference_question=reference_question)
+def build_dynamic_question(
+    date_key: str,
+    reference_question: str,
+    variation_salt: str = "",
+) -> tuple[str, list[str], str, str]:
+    seed = stable_seed(
+        date_key=date_key,
+        reference_question=reference_question,
+        variation_salt=variation_salt,
+    )
     track = pick_track(seed)
     topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
     topic = topic_pool[seed % len(topic_pool)]
@@ -677,7 +685,18 @@ def main() -> int:
         except (HTTPError, URLError, TimeoutError, ValueError):
             reference_question = ""
 
-    seed = stable_seed(date_key=date_key, reference_question=reference_question)
+    variation_salt = os.environ.get("QUESTION_VARIATION_SALT", "").strip()
+    if not variation_salt:
+        run_id = os.environ.get("GITHUB_RUN_ID", "").strip()
+        run_attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "").strip()
+        if run_id:
+            variation_salt = f"{run_id}-{run_attempt or '1'}"
+
+    seed = stable_seed(
+        date_key=date_key,
+        reference_question=reference_question,
+        variation_salt=variation_salt,
+    )
     track = pick_track(seed)
     topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
     topic = topic_pool[seed % len(topic_pool)]
@@ -717,12 +736,14 @@ def main() -> int:
             question, follow_ups, category, track = build_dynamic_question(
                 date_key=date_key,
                 reference_question=reference_question,
+                variation_salt=variation_salt,
             )
             source_mode = "reference+generated" if reference_question else "generated"
     else:
         question, follow_ups, category, track = build_dynamic_question(
             date_key=date_key,
             reference_question=reference_question,
+            variation_salt=variation_salt,
         )
         source_mode = "reference+generated" if reference_question else "generated"
 

@@ -29,6 +29,9 @@
 - `QUESTION_GENERATION_MODE`
   - `auto` | `always` | `never`
   - 기본값: `always`
+- `QUESTION_VARIATION_SALT` (선택)
+  - 질문 다양화를 위한 시드 값
+  - 미설정 시 GitHub Actions의 `run_id-run_attempt`를 기본 사용
 - `GEMINI_MODEL` (선택)
   - 기본값: `gemini-2.5-flash`
 - `GEMINI_REQUEST_TIMEOUT_SEC` (선택)
@@ -55,5 +58,6 @@
 - `tts/embedding/image` 등 텍스트 질문 생성에 맞지 않는 모델은 자동 제외합니다.
 - Gemini 응답이 JSON 형식이 아니거나 비어 있으면 동일 모델에서 재시도 후 다음 후보 모델로 넘어갑니다.
 - 일시적 네트워크 타임아웃은 동일 모델에서 재시도합니다(`GEMINI_REQUEST_TIMEOUT_SEC`, `GEMINI_MAX_RETRIES`로 조정 가능).
+- 같은 날짜에도 실행마다 질문을 바꾸고 싶다면 `QUESTION_VARIATION_SALT`를 사용하세요.
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`
