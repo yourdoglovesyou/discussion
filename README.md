@@ -1,8 +1,8 @@
 # Daily Frontend Question PR Bot
 
 매일 프론트엔드 기술 질문을 파일로 생성하고, 해당 변경을 PR로 올리는 GitHub Actions 설정입니다.
-질문은 가볍게 답할 수 있는 기술 질문 형태로 동적 생성됩니다.
-프론트엔드 실무 질문과 CS 질문이 함께 섞여 나옵니다.
+질문은 프론트엔드 면접 기출 CS(기초 개념) 스타일로 동적 생성됩니다.
+예: `event.target vs event.currentTarget`, `debounce vs throttle`, `var/let/const 차이`
 
 ## What it does
 
@@ -10,7 +10,7 @@
 - `daily-frontend-questions/YYYY-MM-DD.md` 파일을 생성합니다.
 - 변경사항이 있으면 자동으로 브랜치/커밋/PR을 만듭니다.
 - `QUESTION_SOURCE_URL`의 질문은 "참고 질문"으로만 사용하고, 최종 질문은 동적으로 생성합니다.
-- 생성 질문은 `CS`와 `Frontend(실무)` 트랙이 혼합됩니다(기본 비율: CS 70% / 실무 30%).
+- 생성 질문은 프론트엔드 CS 중심이며, 개념 설명형 질문을 우선 생성합니다.
 - PR 제목은 당일 기술 질문으로 생성되고, PR 본문에는 트랙/카테고리/후속 질문 등 세부 정보가 포함됩니다.
 - 기본 동작은 AI 전용 생성입니다(`QUESTION_GENERATION_MODE=always`).
 - `GEMINI_API_KEY`가 없거나 AI 생성이 실패하면 워크플로가 실패합니다.

@@ -17,129 +17,147 @@ KST = timezone(timedelta(hours=9))
 
 FRONTEND_INTERVIEW_TOPICS = [
     {
-        "category": "React Architecture",
-        "subject": "상태 관리 경계",
-        "scenario": "검색/필터/정렬이 동시에 바뀌는 대시보드",
-        "tradeoff": "지역 상태, 전역 상태, 서버 상태를 어떻게 분리할지",
+        "category": "React Basics",
+        "subject": "key를 왜 써야 하는지와 잘못 썼을 때 문제",
+        "scenario": "리스트를 렌더링하고 항목 순서가 자주 바뀌는 화면",
+        "tradeoff": "index를 key로 쓰는 경우의 위험",
     },
     {
-        "category": "Rendering Performance",
-        "subject": "렌더링 병목 진단",
-        "scenario": "스크롤 중 카드 리스트가 버벅이는 모바일 웹",
-        "tradeoff": "memoization, virtualization, 계산 캐싱의 적용 기준",
+        "category": "React Hooks",
+        "subject": "useEffect dependency array 동작 원리",
+        "scenario": "API 호출과 상태 업데이트가 함께 있는 컴포넌트",
+        "tradeoff": "의존성 누락/과다 지정으로 생기는 버그",
     },
     {
-        "category": "Browser Internals",
-        "subject": "Reflow/Repaint/Composite 최적화",
-        "scenario": "실시간 애니메이션이 많은 랜딩 페이지",
-        "tradeoff": "레이아웃 변경 최소화와 시각 품질의 균형",
+        "category": "React Forms",
+        "subject": "controlled와 uncontrolled 컴포넌트 차이",
+        "scenario": "입력 폼 유효성 검사가 필요한 페이지",
+        "tradeoff": "구현 단순성 vs 상태 제어 용이성",
     },
     {
-        "category": "TypeScript",
-        "subject": "타입 설계 전략",
-        "scenario": "빠르게 변하는 백엔드 응답 스키마",
-        "tradeoff": "유연성과 타입 안정성 사이의 의사결정",
+        "category": "React State",
+        "subject": "state 끌어올리기(lifting state up)가 필요한 기준",
+        "scenario": "형제 컴포넌트 간 입력값을 동기화해야 하는 화면",
+        "tradeoff": "props drilling 증가와 구조 단순성의 균형",
     },
     {
-        "category": "Data Fetching",
-        "subject": "캐싱/동기화 정책",
-        "scenario": "동일 데이터가 여러 화면에서 동시에 수정되는 서비스",
-        "tradeoff": "낙관적 업데이트, 재검증, 롤백 전략",
+        "category": "TypeScript Basics",
+        "subject": "any와 unknown의 차이",
+        "scenario": "외부 API 응답 타입이 불확실한 상황",
+        "tradeoff": "빠른 개발 vs 타입 안정성",
     },
     {
-        "category": "SSR/CSR Strategy",
-        "subject": "렌더링 전략 선택",
-        "scenario": "SEO와 실시간성이 모두 중요한 커머스 페이지",
-        "tradeoff": "초기 로딩 속도와 상호작용 성능 간의 균형",
-    },
-    {
-        "category": "Testing",
-        "subject": "테스트 피라미드 설계",
-        "scenario": "릴리즈 주기가 매우 짧은 제품 팀",
-        "tradeoff": "신뢰도와 유지보수 비용의 균형",
-    },
-    {
-        "category": "Web Security",
-        "subject": "브라우저 보안 대응",
-        "scenario": "사용자 생성 HTML을 렌더링하는 기능",
-        "tradeoff": "보안 강도와 개발 생산성 간의 균형",
+        "category": "Rendering",
+        "subject": "React 렌더링 최적화에서 memo/useMemo/useCallback 차이",
+        "scenario": "불필요한 리렌더링이 발생하는 컴포넌트",
+        "tradeoff": "최적화 코드 복잡도 증가",
     },
     {
         "category": "Accessibility",
-        "subject": "키보드/스크린리더 접근성",
-        "scenario": "커스텀 컴포넌트 기반 디자인 시스템",
-        "tradeoff": "디자인 자유도와 접근성 표준 준수",
+        "subject": "button과 div 클릭 핸들링의 접근성 차이",
+        "scenario": "커스텀 클릭 가능한 UI 컴포넌트를 만들 때",
+        "tradeoff": "디자인 자유도와 시맨틱/키보드 접근성",
     },
     {
-        "category": "Bundling",
-        "subject": "번들 최적화",
-        "scenario": "초기 진입 페이지 번들 크기가 큰 SaaS",
-        "tradeoff": "개발 편의성과 런타임 성능의 균형",
+        "category": "Testing Basics",
+        "subject": "mock과 stub의 차이",
+        "scenario": "컴포넌트 테스트에서 API 호출을 대체할 때",
+        "tradeoff": "테스트 신뢰도와 테스트 작성 난이도",
+    },
+    {
+        "category": "Browser Basics",
+        "subject": "localStorage/sessionStorage/cookie 차이",
+        "scenario": "로그인 상태와 사용자 설정값 저장이 필요한 상황",
+        "tradeoff": "보안/만료 정책/용량 제한의 차이",
+    },
+    {
+        "category": "HTTP Basics",
+        "subject": "CORS와 preflight 요청이 발생하는 이유",
+        "scenario": "다른 도메인의 API를 브라우저에서 호출할 때",
+        "tradeoff": "보안 정책 강화와 개발 편의성",
     },
 ]
 
 CS_INTERVIEW_TOPICS = [
     {
-        "category": "Data Structures",
-        "subject": "배열 vs 연결 리스트 선택",
-        "scenario": "잦은 삽입/삭제와 랜덤 접근이 공존하는 UI 상태 저장",
-        "tradeoff": "시간복잡도, 메모리 오버헤드, 구현 복잡도의 균형",
+        "category": "DOM Event",
+        "subject": "event.target과 event.currentTarget의 차이",
+        "scenario": "이벤트 위임으로 리스트 아이템 클릭을 처리할 때",
+        "tradeoff": "버블링 활용의 장단점",
     },
     {
-        "category": "Algorithms",
-        "subject": "정렬/탐색 전략",
-        "scenario": "대량 목록 필터링과 정렬이 반복되는 클라이언트 화면",
-        "tradeoff": "정확도, 응답속도, CPU 사용량의 균형",
+        "category": "DOM Event",
+        "subject": "event bubbling과 capturing의 차이",
+        "scenario": "중첩된 요소에서 클릭 이벤트가 동시에 걸려 있을 때",
+        "tradeoff": "핸들러 구성 단순성 vs 예측 가능성",
     },
     {
-        "category": "Complexity",
-        "subject": "시간복잡도 최적화",
-        "scenario": "렌더링 전 데이터 가공 단계가 길어지는 대시보드",
-        "tradeoff": "사전 계산, 캐시, 메모리 사용량 간의 균형",
+        "category": "DOM Event",
+        "subject": "preventDefault와 stopPropagation 차이",
+        "scenario": "링크가 포함된 카드 컴포넌트에서 클릭 동작을 제어할 때",
+        "tradeoff": "사용자 기대 동작과 이벤트 흐름 제어",
     },
     {
-        "category": "Network",
-        "subject": "TCP/HTTP 동작 이해",
-        "scenario": "API 응답 지연으로 초기 화면 표시가 느린 서비스",
-        "tradeoff": "요청 병렬화, 커넥션 재사용, 캐시 정책의 균형",
+        "category": "JavaScript Core",
+        "subject": "this 바인딩 규칙",
+        "scenario": "콜백 함수 안에서 this가 의도와 다르게 동작할 때",
+        "tradeoff": "함수 표현식/화살표 함수 선택 기준",
     },
     {
-        "category": "Concurrency",
-        "subject": "이벤트 루프/비동기 처리",
-        "scenario": "사용자 입력, 애니메이션, 데이터 요청이 동시에 발생",
-        "tradeoff": "응답성 유지와 작업 순서 보장의 균형",
+        "category": "JavaScript Core",
+        "subject": "closure가 무엇인지와 사용 사례",
+        "scenario": "함수 실행이 끝난 뒤에도 내부 변수를 유지해야 할 때",
+        "tradeoff": "캡슐화 이점과 메모리 관리 주의점",
     },
     {
-        "category": "Caching",
-        "subject": "캐시 일관성",
-        "scenario": "여러 탭에서 동일 리소스를 갱신하는 웹앱",
-        "tradeoff": "최신성, 성능, 구현 복잡도 간의 균형",
+        "category": "JavaScript Core",
+        "subject": "var, let, const 차이와 호이스팅",
+        "scenario": "스코프 버그가 나는 코드를 디버깅할 때",
+        "tradeoff": "재할당 가능성/스코프 안정성",
     },
     {
-        "category": "Database Basics",
-        "subject": "인덱스와 조회 패턴",
-        "scenario": "검색 API 속도가 화면 UX를 좌우하는 서비스",
-        "tradeoff": "쓰기 성능 저하와 읽기 성능 향상의 균형",
+        "category": "Async",
+        "subject": "Promise, async/await, then/catch 흐름 차이",
+        "scenario": "연속 API 호출에서 에러 처리를 통일해야 할 때",
+        "tradeoff": "가독성과 제어 유연성",
     },
     {
-        "category": "System Design",
-        "subject": "확장성/장애 대응",
-        "scenario": "트래픽 급증 시 프론트-백엔드 경계에서 장애 전파",
-        "tradeoff": "복잡도 증가와 안정성 확보의 균형",
+        "category": "Event Loop",
+        "subject": "microtask와 macrotask의 실행 순서",
+        "scenario": "Promise와 setTimeout이 섞인 코드의 출력 순서를 예측할 때",
+        "tradeoff": "이해 난이도와 디버깅 시간",
+    },
+    {
+        "category": "Performance",
+        "subject": "debounce와 throttle의 차이",
+        "scenario": "검색 입력과 스크롤 이벤트를 최적화할 때",
+        "tradeoff": "응답성 vs 호출 횟수 감소",
+    },
+    {
+        "category": "Browser Rendering",
+        "subject": "Reflow, Repaint, Composite 차이",
+        "scenario": "애니메이션 때문에 화면이 끊길 때",
+        "tradeoff": "시각 품질과 렌더링 비용",
+    },
+    {
+        "category": "Web Security",
+        "subject": "XSS와 CSRF 차이",
+        "scenario": "폼 제출과 사용자 입력 렌더링 기능이 함께 있을 때",
+        "tradeoff": "보안 강도와 개발 편의성",
     },
 ]
 
 QUESTION_TEMPLATES = [
-    "`{scenario}` 상황에서 `{subject}`를 어떻게 설계하면 좋을까요? `{tradeoff}` 기준으로 설명해 주세요.",
-    "`{scenario}`에서 `{subject}`를 개선하려면 어떤 순서로 접근하시겠어요?",
-    "`{scenario}` 기능을 구현할 때 `{subject}` 관점에서 어떤 선택을 하시겠어요?",
+    "`{subject}`의 차이/동작을 설명해 주세요. (`{scenario}`)",
+    "`{subject}`를 면접에서 답한다면 핵심 포인트를 어떻게 설명하시겠어요? (`{scenario}`)",
+    "`{subject}`에서 자주 나오는 함정은 무엇이고, `{tradeoff}` 관점에서 어떻게 정리할 수 있을까요?",
 ]
 
 FOLLOW_UP_TEMPLATES = [
-    "가장 먼저 점검할 지표 2가지는 무엇인가요?",
-    "팀에서 공통 규칙으로 정하고 싶은 기준 1가지는 무엇인가요?",
-    "이 선택을 확인하기 위한 테스트 방법은 어떻게 가져가면 좋을까요?",
-    "초기 구현에서 꼭 챙길 최소 기준은 무엇인가요?",
+    "관련된 실제 코드 예시를 하나 들어 설명해 주세요.",
+    "초보자가 가장 많이 헷갈리는 포인트는 무엇인가요?",
+    "면접에서 1분 내로 답한다면 어떤 순서로 말하겠어요?",
+    "실무에서 이 개념을 틀리면 생길 수 있는 버그 예시는 무엇인가요?",
 ]
 
 REFERENCE_HINT_KEYWORDS = [
@@ -381,9 +399,11 @@ def generate_ai_question(
         f"- 주제 힌트: {topic['subject']}\n"
         f"- 트레이드오프 힌트: {topic['tradeoff']}\n"
         f"- 참고 질문: {reference_line}\n"
-        "- 질문 톤은 가볍고 짧게 작성해 주세요.\n"
-        "- 면접/네카라쿠배/대규모 트래픽 같은 표현은 쓰지 마세요.\n"
-        "- follow-up 2개는 짧고 실용적으로 작성해 주세요.\n"
+        "- 프론트엔드 면접 기출 CS(기초 개념) 스타일로 작성해 주세요.\n"
+        "- 시스템 디자인/대규모 트래픽/장애 대응/인프라 운영 주제는 제외해 주세요.\n"
+        "- 질문은 짧고 명확하게, 그리고 `주제 힌트` 문구를 질문 본문에 그대로 포함해 주세요.\n"
+        "- follow-up 2개는 기초 개념 확인형으로 짧게 작성해 주세요.\n"
+        "- 예시 스타일: event.target vs event.currentTarget, debounce vs throttle, var/let/const 차이\n"
         "- 반드시 JSON만 반환하세요. 코드블록 금지.\n"
         '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )
