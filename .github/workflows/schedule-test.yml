@@ -1,0 +1,17 @@
+name: Schedule Test
+
+on:
+  schedule:
+    - cron: '*/15 * * * *' # every 15 minutes (UTC)
+  workflow_dispatch:
+
+jobs:
+  schedule-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print time
+        run: |
+          echo "Schedule test run: $(date -u)"
