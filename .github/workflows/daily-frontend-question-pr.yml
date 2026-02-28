@@ -87,7 +87,7 @@ jobs:
             });
 
             const author = String(pr.user.login || '').toLowerCase();
-            const candidates = ['prgmr99', 'klmhyeonwoo'];
+            const candidates = ['prgmr99', 'klmhyeonwoo', 'JaeIn1'];
             const reviewers = candidates.filter((u) => u.toLowerCase() !== author);
 
             if (reviewers.length === 0) {
