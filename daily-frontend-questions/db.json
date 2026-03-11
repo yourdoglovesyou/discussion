@@ -1,0 +1,546 @@
+{
+  "version": 1,
+  "updated_at": "2026-03-11T14:15:34+00:00",
+  "items": [
+    {
+      "date": "seed",
+      "question": "브라우저 저장소(cookie/localStorage/sessionStorage) 차이점은 무엇인가요?",
+      "normalized_question": "브라우저저장소cookielocalstoragesessionstorage차이점은무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "자바스크립트에서 this 바인딩 규칙과 call/apply/bind는 어떻게 다른가요?",
+      "normalized_question": "자바스크립트에서this바인딩규칙과callapplybind는어떻게다른가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "preventDefault와 stopPropagation의 차이점을 설명해 보세요.",
+      "normalized_question": "preventdefault와stoppropagation의차이점을설명해보세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "React에서 key가 왜 필요하며, 어떤 역할을 하나요?",
+      "normalized_question": "react에서key가왜필요하며어떤역할을하나요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "Promise.all, Promise.allSettled, Promise.race의 차이점은 무엇인가요?",
+      "normalized_question": "promiseallpromiseallsettledpromiserace의차이점은무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "TypeScript에서 any와 unknown의 주요 차이점은 무엇인가요?",
+      "normalized_question": "typescript에서any와unknown의주요차이점은무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "Vue 라이프사이클 훅 사용 시점 중 onMounted와 onUnmounted는 언제 사용해야 할까요?",
+      "normalized_question": "vue라이프사이클훅사용시점중onmounted와onunmounted는언제사용해야할까요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "싱글 스레드에서 자바스크립트가 동시성을 다루는 방식은 무엇인가요?",
+      "normalized_question": "싱글스레드에서자바스크립트가동시성을다루는방식은무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "async/await와 then/catch의 주요 제어 흐름 차이는 무엇인가요?",
+      "normalized_question": "asyncawait와thencatch의주요제어흐름차이는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "Critical Rendering Path(CRP)의 주요 단계들을 설명해 주세요.",
+      "normalized_question": "criticalrenderingpathcrp의주요단계들을설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "재사용 가능한 훅/유틸 함수를 만들 때 제네릭을 써야 하는 경우는 언제인가요?",
+      "normalized_question": "재사용가능한훅유틸함수를만들때제네릭을써야하는경우는언제인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "microtask와 macrotask의 실행 순서를 설명해 보세요.",
+      "normalized_question": "microtask와macrotask의실행순서를설명해보세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "XSS와 CSRF의 주요 차이점은 무엇인가요?",
+      "normalized_question": "xss와csrf의주요차이점은무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "event bubbling과 capturing의 동작 방식 차이를 설명해 주세요.",
+      "normalized_question": "eventbubbling과capturing의동작방식차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "CORS와 preflight 요청이 발생하는 이유는 무엇인가요?",
+      "normalized_question": "cors와preflight요청이발생하는이유는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`브라우저 저장소(cookie/localStorage/sessionStorage) 차이` 차이를 설명해 주세요.",
+      "normalized_question": "브라우저저장소cookielocalstoragesessionstorage차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`브라우저 저장소(cookie/localStorage/sessionStorage) 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "브라우저저장소cookielocalstoragesessionstorage차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`브라우저 저장소(cookie/localStorage/sessionStorage) 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "브라우저저장소cookielocalstoragesessionstorage차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`this 바인딩 규칙(call/apply/bind 포함)` 차이를 설명해 주세요.",
+      "normalized_question": "this바인딩규칙callapplybind포함차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`this 바인딩 규칙(call/apply/bind 포함)` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "this바인딩규칙callapplybind포함핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`this 바인딩 규칙(call/apply/bind 포함)` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "this바인딩규칙callapplybind포함면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`preventDefault와 stopPropagation 차이` 차이를 설명해 주세요.",
+      "normalized_question": "preventdefault와stoppropagation차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`preventDefault와 stopPropagation 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "preventdefault와stoppropagation차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`preventDefault와 stopPropagation 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "preventdefault와stoppropagation차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`React에서 key가 왜 필요한지` 차이를 설명해 주세요.",
+      "normalized_question": "react에서key가왜필요한지차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`React에서 key가 왜 필요한지` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "react에서key가왜필요한지핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`React에서 key가 왜 필요한지` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "react에서key가왜필요한지면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Promise.all / Promise.allSettled / Promise.race 차이` 차이를 설명해 주세요.",
+      "normalized_question": "promiseallpromiseallsettledpromiserace차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Promise.all / Promise.allSettled / Promise.race 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "promiseallpromiseallsettledpromiserace차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Promise.all / Promise.allSettled / Promise.race 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "promiseallpromiseallsettledpromiserace차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`any와 unknown 차이` 차이를 설명해 주세요.",
+      "normalized_question": "any와unknown차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`any와 unknown 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "any와unknown차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`any와 unknown 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "any와unknown차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Vue 라이프사이클 훅(onMounted/onUnmounted) 사용 시점` 차이를 설명해 주세요.",
+      "normalized_question": "vue라이프사이클훅onmountedonunmounted사용시점차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Vue 라이프사이클 훅(onMounted/onUnmounted) 사용 시점` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "vue라이프사이클훅onmountedonunmounted사용시점핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Vue 라이프사이클 훅(onMounted/onUnmounted) 사용 시점` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "vue라이프사이클훅onmountedonunmounted사용시점면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`싱글 스레드에서 자바스크립트가 동시성을 다루는 방식` 차이를 설명해 주세요.",
+      "normalized_question": "싱글스레드에서자바스크립트가동시성을다루는방식차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`싱글 스레드에서 자바스크립트가 동시성을 다루는 방식` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "싱글스레드에서자바스크립트가동시성을다루는방식핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`싱글 스레드에서 자바스크립트가 동시성을 다루는 방식` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "싱글스레드에서자바스크립트가동시성을다루는방식면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`async/await와 then/catch 차이` 차이를 설명해 주세요.",
+      "normalized_question": "asyncawait와thencatch차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`async/await와 then/catch 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "asyncawait와thencatch차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`async/await와 then/catch 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "asyncawait와thencatch차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Critical Rendering Path(CRP)의 단계` 차이를 설명해 주세요.",
+      "normalized_question": "criticalrenderingpathcrp의단계차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Critical Rendering Path(CRP)의 단계` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "criticalrenderingpathcrp의단계핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`Critical Rendering Path(CRP)의 단계` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "criticalrenderingpathcrp의단계면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`제네릭을 써야 하는 경우` 차이를 설명해 주세요.",
+      "normalized_question": "제네릭을써야하는경우차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`제네릭을 써야 하는 경우` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "제네릭을써야하는경우핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`제네릭을 써야 하는 경우` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "제네릭을써야하는경우면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`microtask와 macrotask의 실행 순서` 차이를 설명해 주세요.",
+      "normalized_question": "microtask와macrotask의실행순서차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`microtask와 macrotask의 실행 순서` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "microtask와macrotask의실행순서핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`microtask와 macrotask의 실행 순서` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "microtask와macrotask의실행순서면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`XSS와 CSRF 차이` 차이를 설명해 주세요.",
+      "normalized_question": "xss와csrf차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`XSS와 CSRF 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "xss와csrf차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`XSS와 CSRF 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "xss와csrf차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`event bubbling과 capturing의 차이` 차이를 설명해 주세요.",
+      "normalized_question": "eventbubbling과capturing의차이차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`event bubbling과 capturing의 차이` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "eventbubbling과capturing의차이핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`event bubbling과 capturing의 차이` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "eventbubbling과capturing의차이면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`CORS와 preflight 요청이 발생하는 이유` 차이를 설명해 주세요.",
+      "normalized_question": "cors와preflight요청이발생하는이유차이를설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`CORS와 preflight 요청이 발생하는 이유` 핵심 개념을 짧게 설명해 주세요.",
+      "normalized_question": "cors와preflight요청이발생하는이유핵심개념을짧게설명해주세요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    },
+    {
+      "date": "seed",
+      "question": "`CORS와 preflight 요청이 발생하는 이유` 면접 답변 포인트는 무엇인가요?",
+      "normalized_question": "cors와preflight요청이발생하는이유면접답변포인트는무엇인가요",
+      "category": "seed",
+      "track": "seed",
+      "source_mode": "seed",
+      "markdown_file": ""
+    }
+  ]
+}

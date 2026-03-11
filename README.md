@@ -4,6 +4,7 @@
 질문은 프론트엔드 면접 기출 CS(기초 개념) 스타일로 동적 생성됩니다.
 범위: JavaScript, React, Vue, TypeScript, Browser Architecture
 예: `event.target vs event.currentTarget`, `debounce vs throttle`, `React key`, `Vue computed vs watch`
+생성한 질문 이력은 `daily-frontend-questions/db.json`에 저장되며, 중복 질문이 나오면 자동 재생성됩니다.
 
 ## What it does
 
@@ -33,6 +34,12 @@
 - `QUESTION_VARIATION_SALT` (선택)
   - 질문 다양화를 위한 시드 값
   - 미설정 시 GitHub Actions의 `run_id-run_attempt`를 기본 사용
+- `QUESTION_DB_PATH` (선택)
+  - 질문 이력 DB JSON 경로
+  - 기본값: `daily-frontend-questions/db.json`
+- `QUESTION_DEDUP_MAX_ATTEMPTS` (선택)
+  - 중복 질문 회피를 위해 재생성할 최대 횟수
+  - 기본값: `12`
 - `GEMINI_MODEL` (선택)
   - 기본값: `gemini-2.5-flash`
 - `GEMINI_REQUEST_TIMEOUT_SEC` (선택)
@@ -64,5 +71,6 @@
 - Gemini 응답이 JSON 형식이 아니거나 비어 있으면 동일 모델에서 재시도 후 다음 후보 모델로 넘어갑니다.
 - 일시적 네트워크 타임아웃은 동일 모델에서 재시도합니다(`GEMINI_REQUEST_TIMEOUT_SEC`, `GEMINI_MAX_RETRIES`로 조정 가능).
 - 같은 날짜에도 실행마다 질문을 바꾸고 싶다면 `QUESTION_VARIATION_SALT`를 사용하세요.
+- 기존 생성 이력과 질문이 중복되면 `QUESTION_DEDUP_MAX_ATTEMPTS` 내에서 자동 재생성합니다.
 - 질문 생성 스크립트:
   - `scripts/generate_daily_question.py`

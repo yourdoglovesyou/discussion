@@ -368,6 +368,94 @@ def get_int_env(name: str, default: int, min_value: int = 1) -> int:
     return max(parsed, min_value)
 
 
+def normalize_question_key(question: str) -> str:
+    normalized = sanitize_inline(question).lower().replace("`", "")
+    normalized = re.sub(r"[^0-9a-z가-힣]+", "", normalized)
+    return normalized
+
+
+def empty_question_db() -> dict:
+    return {"version": 1, "updated_at": "", "items": []}
+
+
+def load_question_db(db_path: Path) -> dict:
+    if not db_path.exists():
+        return empty_question_db()
+
+    try:
+        raw = json.loads(db_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as err:
+        print(f"[warn] failed to parse question db ({db_path}): {err}", file=sys.stderr)
+        return empty_question_db()
+
+    if not isinstance(raw, dict):
+        return empty_question_db()
+
+    items = raw.get("items", [])
+    if not isinstance(items, list):
+        items = []
+
+    return {
+        "version": int(raw.get("version", 1)),
+        "updated_at": str(raw.get("updated_at", "")),
+        "items": [item for item in items if isinstance(item, dict)],
+    }
+
+
+def build_used_question_keys(question_db: dict) -> set[str]:
+    used_keys: set[str] = set()
+    for item in question_db.get("items", []):
+        if not isinstance(item, dict):
+            continue
+        key = sanitize_inline(str(item.get("normalized_question", "")))
+        if not key:
+            key = normalize_question_key(str(item.get("question", "")))
+        if key:
+            used_keys.add(key)
+    return used_keys
+
+
+def save_question_db(db_path: Path, question_db: dict) -> None:
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    db_path.write_text(
+        json.dumps(question_db, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def append_question_db(
+    question_db: dict,
+    question_key: str,
+    date_key: str,
+    question: str,
+    category: str,
+    track: str,
+    source_mode: str,
+    markdown_path: Path,
+) -> None:
+    question_db["items"].append(
+        {
+            "date": date_key,
+            "question": sanitize_inline(question),
+            "normalized_question": question_key,
+            "category": sanitize_inline(category),
+            "track": "CS" if track == "cs" else "Frontend",
+            "source_mode": sanitize_inline(source_mode),
+            "markdown_file": markdown_path.as_posix(),
+        }
+    )
+    question_db["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def build_attempt_salt(base_salt: str, attempt: int) -> str:
+    if attempt == 0:
+        return base_salt
+    attempt_tag = f"dedup-{attempt}"
+    if not base_salt:
+        return attempt_tag
+    return f"{base_salt}|{attempt_tag}"
+
+
 def is_text_model_candidate(model_name: str) -> bool:
     lowered = model_name.lower()
     blocked_tokens = ["tts", "embedding", "image", "aqa"]
@@ -439,18 +527,34 @@ def generate_ai_question(
     base_url: str = "https://generativelanguage.googleapis.com/v1beta",
     request_timeout_sec: int = 60,
     max_attempts: int = 7,
+    avoid_questions: list[str] | None = None,
+    variation_tag: str = "",
 ) -> tuple[str, list[str], str, str]:
     track_label = "CS" if track == "cs" else "Frontend"
     reference_line = reference_question if reference_question else "N/A"
+    avoid_questions = avoid_questions or []
+    variation_line = variation_tag or "base"
+    avoid_block = ""
+    if avoid_questions:
+        rendered = "\n".join(
+            [f"  - {sanitize_inline(item)}" for item in avoid_questions[:20] if sanitize_inline(item)]
+        )
+        if rendered:
+            avoid_block = (
+                "- 아래 기존 질문들과 완전히 동일한 문장을 출력하지 마세요.\n"
+                f"{rendered}\n"
+            )
     prompt = (
         "다음 규칙으로 한국어 기술 질문을 만들어 주세요.\n"
         f"- 날짜: {date_key}\n"
+        f"- variation tag: {variation_line}\n"
         f"- 트랙: {track_label}\n"
         f"- 카테고리 힌트: {topic['category']}\n"
         f"- 시나리오 힌트: {topic['scenario']}\n"
         f"- 주제 힌트: {topic['subject']}\n"
         f"- 트레이드오프 힌트: {topic['tradeoff']}\n"
         f"- 참고 질문: {reference_line}\n"
+        f"{avoid_block}"
         "- 프론트엔드 면접 기출 CS(기초 개념) 스타일로 작성해 주세요.\n"
         "- 주제 범위는 JavaScript, React, Vue, TypeScript, Browser Architecture, Web API로 제한해 주세요.\n"
         "- 시스템 디자인/대규모 트래픽/장애 대응/인프라 운영 주제는 제외해 주세요.\n"
@@ -674,6 +778,8 @@ def set_github_output_extended(
     follow_ups: list[str],
     reference_hint: str,
     reference_question: str,
+    db_path: Path,
+    dedup_attempt: int,
 ) -> None:
     output_file = os.environ.get("GITHUB_OUTPUT")
     if not output_file:
@@ -693,6 +799,8 @@ def set_github_output_extended(
         f.write(f"reference_hint={sanitize_inline(reference_hint)}\n")
         f.write(f"reference_question={sanitize_inline(reference_question) if reference_question else 'N/A'}\n")
         f.write(f"pr_title={pr_title}\n")
+        f.write(f"question_db_path={db_path.as_posix()}\n")
+        f.write(f"dedup_attempt={dedup_attempt}\n")
 
 
 def main() -> int:
@@ -718,6 +826,16 @@ def main() -> int:
         default=os.environ.get("QUESTION_GENERATION_MODE", "always"),
         choices=["auto", "always", "never"],
     )
+    parser.add_argument(
+        "--db-path",
+        default=os.environ.get("QUESTION_DB_PATH", ""),
+        help="Path to question history DB JSON. Default: <output-dir>/db.json",
+    )
+    parser.add_argument(
+        "--dedup-max-attempts",
+        type=int,
+        default=get_int_env("QUESTION_DEDUP_MAX_ATTEMPTS", 12, min_value=1),
+    )
     args = parser.parse_args()
 
     now = datetime.now(KST if args.tz == "KST" else timezone.utc)
@@ -740,15 +858,6 @@ def main() -> int:
         if run_id:
             variation_salt = f"{run_id}-{run_attempt or '1'}"
 
-    seed = stable_seed(
-        date_key=date_key,
-        reference_question=reference_question,
-        variation_salt=variation_salt,
-    )
-    track = pick_track(seed)
-    topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
-    topic = topic_pool[seed % len(topic_pool)]
-
     gemini_api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     gemini_model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash").strip()
     gemini_base_url = os.environ.get(
@@ -763,37 +872,83 @@ def main() -> int:
     if use_ai and not gemini_api_key and args.generation_mode == "always":
         raise RuntimeError("QUESTION_GENERATION_MODE=always requires GEMINI_API_KEY")
 
-    if use_ai and gemini_api_key:
-        used_ai_model = ""
-        try:
-            question, follow_ups, category, used_ai_model = generate_ai_question(
-                api_key=gemini_api_key,
-                model=gemini_model,
-                date_key=date_key,
-                track=track,
-                topic=topic,
-                reference_question=reference_question,
-                base_url=gemini_base_url,
-                request_timeout_sec=gemini_request_timeout_sec,
-                max_attempts=gemini_max_retries,
-            )
-            source_mode = "ai+reference" if reference_question else "ai"
-        except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError) as err:
-            if args.generation_mode == "always":
-                raise RuntimeError(f"AI generation failed in always mode: {err}") from err
+    db_path = Path(args.db_path) if args.db_path else Path(args.output_dir) / "db.json"
+    question_db = load_question_db(db_path)
+    used_question_keys = build_used_question_keys(question_db)
+    recent_questions = [
+        sanitize_inline(str(item.get("question", "")))
+        for item in question_db.get("items", [])
+        if isinstance(item, dict) and sanitize_inline(str(item.get("question", "")))
+    ]
+
+    used_ai_model = ""
+    dedup_attempt = 0
+    question = ""
+    follow_ups: list[str] = []
+    category = ""
+    track = "cs"
+    question_key = ""
+
+    max_dedup_attempts = max(args.dedup_max_attempts, 1)
+    for attempt in range(max_dedup_attempts):
+        dedup_attempt = attempt + 1
+        attempt_salt = build_attempt_salt(variation_salt, attempt)
+
+        seed = stable_seed(
+            date_key=date_key,
+            reference_question=reference_question,
+            variation_salt=attempt_salt,
+        )
+        track = pick_track(seed)
+        topic_pool = CS_INTERVIEW_TOPICS if track == "cs" else FRONTEND_INTERVIEW_TOPICS
+        topic = topic_pool[seed % len(topic_pool)]
+
+        if use_ai and gemini_api_key:
+            used_ai_model = ""
+            try:
+                question, follow_ups, category, used_ai_model = generate_ai_question(
+                    api_key=gemini_api_key,
+                    model=gemini_model,
+                    date_key=date_key,
+                    track=track,
+                    topic=topic,
+                    reference_question=reference_question,
+                    base_url=gemini_base_url,
+                    request_timeout_sec=gemini_request_timeout_sec,
+                    max_attempts=gemini_max_retries,
+                    avoid_questions=recent_questions[-20:],
+                    variation_tag=attempt_salt,
+                )
+                source_mode = "ai+reference" if reference_question else "ai"
+            except (HTTPError, URLError, TimeoutError, ValueError, json.JSONDecodeError) as err:
+                if args.generation_mode == "always":
+                    raise RuntimeError(f"AI generation failed in always mode: {err}") from err
+                question, follow_ups, category, track = build_dynamic_question(
+                    date_key=date_key,
+                    reference_question=reference_question,
+                    variation_salt=attempt_salt,
+                )
+                source_mode = "reference+generated" if reference_question else "generated"
+        else:
             question, follow_ups, category, track = build_dynamic_question(
                 date_key=date_key,
                 reference_question=reference_question,
-                variation_salt=variation_salt,
+                variation_salt=attempt_salt,
             )
             source_mode = "reference+generated" if reference_question else "generated"
-    else:
-        question, follow_ups, category, track = build_dynamic_question(
-            date_key=date_key,
-            reference_question=reference_question,
-            variation_salt=variation_salt,
+
+        question_key = normalize_question_key(question)
+        if question_key and question_key not in used_question_keys:
+            break
+        print(
+            f"Duplicate question detected ({dedup_attempt}/{max_dedup_attempts}): {question}",
+            file=sys.stderr,
         )
-        source_mode = "reference+generated" if reference_question else "generated"
+    else:
+        raise RuntimeError(
+            f"Failed to generate a unique question after {max_dedup_attempts} attempts. "
+            f"db={db_path.as_posix()}"
+        )
 
     reference_hint = infer_reference_hint(reference_question)
 
@@ -818,9 +973,24 @@ def main() -> int:
         follow_ups=follow_ups,
         reference_hint=reference_hint,
         reference_question=reference_question,
+        db_path=db_path,
+        dedup_attempt=dedup_attempt,
     )
+    append_question_db(
+        question_db=question_db,
+        question_key=question_key,
+        date_key=date_key,
+        question=question,
+        category=category,
+        track=track,
+        source_mode=source_mode,
+        markdown_path=file_path,
+    )
+    save_question_db(db_path, question_db)
 
     print(f"Generated: {file_path}")
+    print(f"Question DB: {db_path.as_posix()}")
+    print(f"Dedup attempt used: {dedup_attempt}/{max_dedup_attempts}")
     print(f"Source mode: {source_mode}")
     if source_mode.startswith("ai"):
         print(f"AI model: {used_ai_model}")
