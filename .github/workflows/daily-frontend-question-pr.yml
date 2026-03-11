@@ -70,7 +70,7 @@ jobs:
             frontend-question
           delete-branch: true
 
-      - name: Request Reviewers (Exclude Author)
+      - name: Request Reviewers and Assign Assignees (Exclude Author)
         if: ${{ steps.cpr.outputs.pull-request-number }}
         uses: actions/github-script@v7
         with:
@@ -91,7 +91,7 @@ jobs:
             const reviewers = candidates.filter((u) => u.toLowerCase() !== author);
 
             if (reviewers.length === 0) {
-              core.info('No eligible reviewers after excluding PR author.');
+              core.info('No eligible reviewers/assignees after excluding PR author.');
               return;
             }
 
@@ -102,3 +102,15 @@ jobs:
               reviewers,
             });
             core.info(`Requested reviewers: ${reviewers.join(', ')}`);
+
+            try {
+              await github.rest.issues.addAssignees({
+                owner,
+                repo,
+                issue_number: pull_number,
+                assignees: reviewers,
+              });
+              core.info(`Assigned assignees: ${reviewers.join(', ')}`);
+            } catch (err) {
+              core.warning(`Failed to assign assignees: ${String(err.message || err)}`);
+            }
