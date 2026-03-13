@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-11T14:15:34+00:00",
+  "updated_at": "2026-03-13T06:55:21+00:00",
   "items": [
     {
       "date": "seed",
@@ -541,6 +541,15 @@
       "track": "seed",
       "source_mode": "seed",
       "markdown_file": ""
+    },
+    {
+      "date": "2026-03-13",
+      "question": "HTTP CORS와 preflight 요청이 발생하는 이유를 설명하세요.",
+      "normalized_question": "httpcors와preflight요청이발생하는이유를설명하세요",
+      "category": "HTTP",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-13.md"
     }
   ]
 }
