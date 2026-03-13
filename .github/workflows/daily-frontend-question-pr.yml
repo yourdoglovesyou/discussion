@@ -27,6 +27,7 @@ jobs:
         env:
           QUESTION_SOURCE_URL: ${{ vars.QUESTION_SOURCE_URL || 'https://www.maeil-mail.kr/question/mine/gentlemonster77@likelion.org?category=frontend' }}
           QUESTION_SOURCE_COOKIE: ${{ secrets.QUESTION_SOURCE_COOKIE || '' }}
+          QUESTION_DB_PATH: daily-frontend-questions/db.json
           QUESTION_VARIATION_SALT: ${{ github.run_id }}-${{ github.run_attempt }}
           QUESTION_GENERATION_MODE: ${{ vars.QUESTION_GENERATION_MODE || 'always' }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
@@ -43,7 +44,6 @@ jobs:
           add-paths: daily-frontend-questions
           commit-message: "chore: add daily frontend question (${{ github.run_id }})"
           branch: "bot/daily-frontend-question"
-          branch-suffix: timestamp
           title: "${{ steps.generate.outputs.pr_title }}"
           body: |
             ## Today's Technical Question
