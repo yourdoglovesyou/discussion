@@ -27,7 +27,7 @@ trigger_on:
   - issue_comment
 
 # Style guide file path
-styleguide: .github/gemini/styleguide.md
+styleguide: .gemini/styleguide.md
 
 # Review tone
 tone: educational  # educational / strict / friendly
