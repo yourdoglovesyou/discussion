@@ -1,0 +1,44 @@
+## Gemini Code Review Bot Configuration
+## Purpose: Review answers to daily frontend technical interview questions
+
+# Gemini model to use
+model: gemini-2.5-flash
+
+# Language for review responses
+language: Korean
+
+# Review focus - what the bot should prioritize
+review_focus:
+  - answer_correctness     # 답변의 기술적 정확성 검증
+  - depth_of_explanation   # 개념 이해도 평가
+  - practical_application  # 실무 적용 가능성
+  - learning_guidance      # 심화 학습 방향 제시
+
+# What NOT to review (ignore these)
+ignore:
+  - code_style
+  - formatting
+  - typos
+  - file_structure
+
+# Trigger condition: only review when PR has a comment (answer from user)
+trigger_on:
+  - pull_request_review_comment
+  - issue_comment
+
+# Style guide file path
+styleguide: .github/gemini/styleguide.md
+
+# Review tone
+tone: educational  # educational / strict / friendly
+
+# Response length
+response_length: detailed  # brief / detailed / comprehensive
+
+# Additional context to provide to the model
+context: |
+  This repository is a daily frontend technical interview question practice system.
+  Each PR contains one frontend interview question.
+  The PR author (or reviewers) post their answers as PR comments.
+  Your role is to evaluate these answers and help the learner deepen their understanding.
+  Always respond in Korean.
