@@ -8,7 +8,7 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
+  pull-requests: write. da9866798a16bb969b42915dc9595491a4e7f6e3
 
 jobs:
   create-daily-question-pr:
@@ -30,7 +30,7 @@ jobs:
           QUESTION_DB_PATH: daily-frontend-questions/db.json
           QUESTION_VARIATION_SALT: ${{ github.run_id }}-${{ github.run_attempt }}
           QUESTION_GENERATION_MODE: ${{ vars.QUESTION_GENERATION_MODE || 'always' }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.0-flash' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || '' }}
           GEMINI_REQUEST_TIMEOUT_SEC: ${{ vars.GEMINI_REQUEST_TIMEOUT_SEC || '60' }}
           GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '7' }}
@@ -43,7 +43,7 @@ jobs:
           token: ${{ secrets.PR_BOT_TOKEN || github.token }}
           add-paths: daily-frontend-questions
           commit-message: "chore: add daily frontend question (${{ github.run_id }})"
-          branch: "bot/daily-frontend-question"
+          branch: "bot/daily-frontend-question-${{ github.run_id }}"
           title: "${{ steps.generate.outputs.pr_title }}"
           body: |
             ## Today's Technical Question
