@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-15T14:27:31+00:00",
+  "updated_at": "2026-03-15T14:29:15+00:00",
   "items": [
     {
       "date": "seed",
@@ -565,6 +565,15 @@
       "question": "JavaScript 클로저(closure)란 무엇이며 언제 사용되나요?",
       "normalized_question": "javascript클로저closure란무엇이며언제사용되나요",
       "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+    },
+    {
+      "date": "2026-03-15",
+      "question": "검색 입력 최적화를 위해 debounce와 throttle 중 무엇을 사용해야 할까요?",
+      "normalized_question": "검색입력최적화를위해debounce와throttle중무엇을사용해야할까요",
+      "category": "Performance",
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-15.md"
