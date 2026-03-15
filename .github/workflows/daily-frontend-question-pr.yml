@@ -36,6 +36,14 @@ jobs:
           GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '7' }}
         run: python scripts/generate_daily_question.py
 
+      - name: Commit db.json to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add daily-frontend-questions/db.json
+          git diff --cached --quiet || git commit -m "chore: update question db (${{ github.run_id }})"
+          git push origin main
+
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v6
