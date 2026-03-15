@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-11T14:15:34+00:00",
+  "updated_at": "2026-03-15T03:16:06+00:00",
   "items": [
     {
       "date": "seed",
@@ -541,6 +541,15 @@
       "track": "seed",
       "source_mode": "seed",
       "markdown_file": ""
+    },
+    {
+      "date": "2026-03-15",
+      "question": "Critical Rendering Path(CRP)의 주요 단계들을 순서대로 설명해 보세요.",
+      "normalized_question": "criticalrenderingpathcrp의주요단계들을순서대로설명해보세요",
+      "category": "Browser Architecture",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
   ]
 }
