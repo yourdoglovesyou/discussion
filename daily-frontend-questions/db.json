@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-15T13:58:08+00:00",
+  "updated_at": "2026-03-15T14:06:44+00:00",
   "items": [
     {
       "date": "seed",
@@ -548,6 +548,15 @@
       "normalized_question": "promiseallpromiseallsettledpromiserace의차이점을설명하세요",
       "category": "JavaScript",
       "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+    },
+    {
+      "date": "2026-03-15",
+      "question": "Vue Composition API에서 ref와 reactive의 주요 차이점은 무엇인가요?",
+      "normalized_question": "vuecompositionapi에서ref와reactive의주요차이점은무엇인가요",
+      "category": "Vue",
+      "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
