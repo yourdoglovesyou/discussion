@@ -27,13 +27,22 @@ jobs:
         env:
           QUESTION_SOURCE_URL: ${{ vars.QUESTION_SOURCE_URL || 'https://www.maeil-mail.kr/question/mine/gentlemonster77@likelion.org?category=frontend' }}
           QUESTION_SOURCE_COOKIE: ${{ secrets.QUESTION_SOURCE_COOKIE || '' }}
+          QUESTION_DB_PATH: daily-frontend-questions/db.json
           QUESTION_VARIATION_SALT: ${{ github.run_id }}-${{ github.run_attempt }}
           QUESTION_GENERATION_MODE: ${{ vars.QUESTION_GENERATION_MODE || 'always' }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.0-flash' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY || '' }}
           GEMINI_REQUEST_TIMEOUT_SEC: ${{ vars.GEMINI_REQUEST_TIMEOUT_SEC || '60' }}
           GEMINI_MAX_RETRIES: ${{ vars.GEMINI_MAX_RETRIES || '7' }}
         run: python scripts/generate_daily_question.py
+
+      - name: Commit db.json to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add daily-frontend-questions/db.json
+          git diff --cached --quiet || git commit -m "chore: update question db (${{ github.run_id }})"
+          git push origin main
 
       - name: Create Pull Request
         id: cpr
@@ -42,8 +51,7 @@ jobs:
           token: ${{ secrets.PR_BOT_TOKEN || github.token }}
           add-paths: daily-frontend-questions
           commit-message: "chore: add daily frontend question (${{ github.run_id }})"
-          branch: "bot/daily-frontend-question"
-          branch-suffix: timestamp
+          branch: "bot/daily-frontend-question-${{ github.run_id }}"
           title: "${{ steps.generate.outputs.pr_title }}"
           body: |
             ## Today's Technical Question
