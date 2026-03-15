@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-11T14:27:39+00:00",
+  "updated_at": "2026-03-15T14:50:40+00:00",
   "items": [
     {
       "date": "seed",
@@ -550,6 +550,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-11.md"
+    },
+    {
+      "date": "2026-03-15",
+      "question": "재사용 가능한 훅/유틸 함수를 만들 때 TypeScript 제네릭을 써야 하는 경우는 언제인가요?",
+      "normalized_question": "재사용가능한훅유틸함수를만들때typescript제네릭을써야하는경우는언제인가요",
+      "category": "TypeScript",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
   ]
 }
