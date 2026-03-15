@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-11T14:15:34+00:00",
+  "updated_at": "2026-03-15T13:56:56+00:00",
   "items": [
     {
       "date": "seed",
@@ -541,6 +541,15 @@
       "track": "seed",
       "source_mode": "seed",
       "markdown_file": ""
+    },
+    {
+      "date": "2026-03-15",
+      "question": "JavaScript의 클로저(closure)가 무엇이며 어떤 상황에 사용되나요?",
+      "normalized_question": "javascript의클로저closure가무엇이며어떤상황에사용되나요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
   ]
 }
