@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-11T14:15:34+00:00",
+  "updated_at": "2026-03-15T13:58:08+00:00",
   "items": [
     {
       "date": "seed",
@@ -541,6 +541,15 @@
       "track": "seed",
       "source_mode": "seed",
       "markdown_file": ""
+    },
+    {
+      "date": "2026-03-15",
+      "question": "Promise.all, Promise.allSettled, Promise.race의 차이점을 설명하세요.",
+      "normalized_question": "promiseallpromiseallsettledpromiserace의차이점을설명하세요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
   ]
 }
