@@ -10,7 +10,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlencode, urlparse, parse_qs, urlunparse
 from urllib.request import Request, urlopen
 
 KST = timezone(timedelta(hours=9))
@@ -91,6 +91,7 @@ FRONTEND_INTERVIEW_TOPICS = [
 ]
 
 CS_INTERVIEW_TOPICS = [
+    # DOM Event
     {
         "category": "DOM Event",
         "subject": "event.target과 event.currentTarget의 차이",
@@ -109,6 +110,13 @@ CS_INTERVIEW_TOPICS = [
         "scenario": "링크가 포함된 카드 컴포넌트에서 클릭 동작을 제어할 때",
         "tradeoff": "사용자 기대 동작과 이벤트 흐름 제어",
     },
+    {
+        "category": "DOM Event",
+        "subject": "이벤트 위임(event delegation) 패턴",
+        "scenario": "동적으로 생성되는 수백 개의 리스트 아이템에 이벤트를 달 때",
+        "tradeoff": "메모리 절약과 핸들러 로직 복잡도",
+    },
+    # JavaScript
     {
         "category": "JavaScript",
         "subject": "this 바인딩 규칙(call/apply/bind 포함)",
@@ -134,11 +142,61 @@ CS_INTERVIEW_TOPICS = [
         "tradeoff": "실패 처리 방식과 응답 완료 전략",
     },
     {
+        "category": "JavaScript",
+        "subject": "프로토타입 체인과 상속 동작 방식",
+        "scenario": "클래스 문법 없이 객체 메서드를 공유해야 할 때",
+        "tradeoff": "메모리 공유 이점과 체인 탐색 비용",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "얕은 복사(shallow copy)와 깊은 복사(deep copy) 차이",
+        "scenario": "중첩 객체 상태를 불변하게 업데이트해야 할 때",
+        "tradeoff": "구현 단순성과 참조 공유 위험",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "Map과 Object의 차이 및 사용 시점",
+        "scenario": "키가 동적으로 바뀌는 빈번한 조회/삽입 구조를 설계할 때",
+        "tradeoff": "API 편의성과 성능 특성",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "Set과 Array의 차이 및 중복 제거",
+        "scenario": "대량 데이터에서 유일값 목록을 빠르게 구해야 할 때",
+        "tradeoff": "조회 성능과 순서 보장 여부",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "제너레이터(generator)와 이터레이터(iterator) 개념",
+        "scenario": "무한 스크롤 데이터를 지연 평가로 처리할 때",
+        "tradeoff": "메모리 효율과 코드 복잡도",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "WeakMap / WeakRef의 용도와 일반 Map과의 차이",
+        "scenario": "DOM 노드에 메타데이터를 붙이되 GC를 막고 싶지 않을 때",
+        "tradeoff": "메모리 누수 방지와 접근 불확실성",
+    },
+    {
+        "category": "JavaScript",
+        "subject": "옵셔널 체이닝(?.)과 널 병합(??) 연산자",
+        "scenario": "깊은 중첩 객체에서 안전하게 값을 꺼낼 때",
+        "tradeoff": "코드 간결성과 falsy 값 처리 주의점",
+    },
+    # Async
+    {
         "category": "Async",
         "subject": "async/await와 then/catch 차이",
         "scenario": "연속 API 호출에서 에러 처리를 통일해야 할 때",
         "tradeoff": "가독성과 제어 유연성",
     },
+    {
+        "category": "Async",
+        "subject": "AbortController로 fetch 요청을 취소하는 방법",
+        "scenario": "사용자가 검색어를 빠르게 바꿔 이전 요청이 불필요해질 때",
+        "tradeoff": "UX 개선과 취소 로직 추가 복잡도",
+    },
+    # Event Loop
     {
         "category": "Event Loop",
         "subject": "microtask와 macrotask의 실행 순서",
@@ -146,11 +204,49 @@ CS_INTERVIEW_TOPICS = [
         "tradeoff": "이해 난이도와 디버깅 시간",
     },
     {
+        "category": "Event Loop",
+        "subject": "requestAnimationFrame vs setTimeout 애니메이션 차이",
+        "scenario": "60fps 애니메이션을 자바스크립트로 구현할 때",
+        "tradeoff": "프레임 동기화 정확성과 배터리 소모",
+    },
+    {
+        "category": "Event Loop",
+        "subject": "requestIdleCallback 활용 시점",
+        "scenario": "분석 이벤트 전송처럼 낮은 우선순위 작업을 처리할 때",
+        "tradeoff": "메인 스레드 양보와 실행 보장 불확실성",
+    },
+    # Performance
+    {
         "category": "Performance",
         "subject": "debounce와 throttle의 차이",
         "scenario": "검색 입력과 스크롤 이벤트를 최적화할 때",
         "tradeoff": "응답성 vs 호출 횟수 감소",
     },
+    {
+        "category": "Performance",
+        "subject": "메모이제이션(memoization)이 필요한 상황",
+        "scenario": "렌더링마다 비용이 큰 계산이 반복될 때",
+        "tradeoff": "CPU 절약과 메모리 증가 트레이드오프",
+    },
+    {
+        "category": "Performance",
+        "subject": "Web Worker를 사용해야 하는 상황",
+        "scenario": "대용량 JSON 파싱이나 이미지 처리로 UI가 멈출 때",
+        "tradeoff": "병렬 처리 이점과 통신 비용·API 제약",
+    },
+    {
+        "category": "Performance",
+        "subject": "가상화(windowing/virtualization) 리스트 렌더링",
+        "scenario": "수만 건 데이터를 목록으로 보여줄 때",
+        "tradeoff": "DOM 노드 절감과 스크롤 위치 관리 복잡도",
+    },
+    {
+        "category": "Performance",
+        "subject": "이미지 lazy loading과 Intersection Observer 활용",
+        "scenario": "뷰포트 밖 이미지가 많은 긴 페이지를 최적화할 때",
+        "tradeoff": "초기 로드 감소와 레이아웃 시프트(CLS) 위험",
+    },
+    # HTTP & Network
     {
         "category": "HTTP",
         "subject": "CORS와 preflight 요청이 발생하는 이유",
@@ -164,16 +260,186 @@ CS_INTERVIEW_TOPICS = [
         "tradeoff": "최신성 보장과 네트워크 절감",
     },
     {
+        "category": "HTTP",
+        "subject": "HTTP/1.1 vs HTTP/2 vs HTTP/3 주요 차이",
+        "scenario": "정적 에셋이 많은 SPA의 네트워크 성능을 개선할 때",
+        "tradeoff": "멀티플렉싱 이점과 서버 설정 복잡도",
+    },
+    {
+        "category": "HTTP",
+        "subject": "REST API와 GraphQL의 차이",
+        "scenario": "한 화면에서 여러 리소스를 조합해 보여줄 때",
+        "tradeoff": "오버페칭 해소와 쿼리 복잡도·캐싱 난이도",
+    },
+    {
+        "category": "HTTP",
+        "subject": "웹소켓(WebSocket)과 SSE(Server-Sent Events) 차이",
+        "scenario": "실시간 알림 또는 채팅 기능을 구현할 때",
+        "tradeoff": "양방향 통신 여부와 구현 복잡도",
+    },
+    {
+        "category": "HTTP",
+        "subject": "쿠키의 SameSite, HttpOnly, Secure 속성",
+        "scenario": "인증 토큰을 쿠키로 관리하며 CSRF를 막아야 할 때",
+        "tradeoff": "보안 강도와 크로스 도메인 사용 제한",
+    },
+    # Browser Architecture
+    {
         "category": "Browser Architecture",
         "subject": "싱글 스레드에서 자바스크립트가 동시성을 다루는 방식",
         "scenario": "UI 이벤트와 비동기 작업이 동시에 많은 상황",
         "tradeoff": "단순한 실행 모델과 블로킹 리스크",
     },
     {
+        "category": "Browser Architecture",
+        "subject": "파서 블로킹 스크립트와 defer/async 속성 차이",
+        "scenario": "서드파티 스크립트 로드 때문에 FCP가 늦어질 때",
+        "tradeoff": "실행 순서 보장과 초기 렌더링 속도",
+    },
+    {
+        "category": "Browser Architecture",
+        "subject": "service worker의 역할과 캐싱 전략",
+        "scenario": "오프라인 지원과 반복 방문 속도 개선이 필요할 때",
+        "tradeoff": "오프라인 대응과 캐시 무효화 복잡도",
+    },
+    {
+        "category": "Browser Architecture",
+        "subject": "브라우저 렌더링 파이프라인(Style→Layout→Paint→Composite)",
+        "scenario": "CSS 변경이 성능에 미치는 영향을 분석할 때",
+        "tradeoff": "표현 자유도와 GPU 레이어 비용",
+    },
+    # Web Security
+    {
         "category": "Web Security",
         "subject": "XSS와 CSRF 차이",
         "scenario": "폼 제출과 사용자 입력 렌더링 기능이 함께 있을 때",
         "tradeoff": "보안 강도와 개발 편의성",
+    },
+    {
+        "category": "Web Security",
+        "subject": "Content Security Policy(CSP) 기본 개념",
+        "scenario": "인라인 스크립트 삽입 공격을 차단해야 할 때",
+        "tradeoff": "XSS 방어 수준과 정책 설정 유지 비용",
+    },
+    {
+        "category": "Web Security",
+        "subject": "JWT 인증 방식과 세션 기반 인증의 차이",
+        "scenario": "여러 도메인에 걸친 SSO를 구현할 때",
+        "tradeoff": "stateless 확장성과 토큰 탈취 대응 어려움",
+    },
+    {
+        "category": "Web Security",
+        "subject": "OAuth 2.0 인가 코드 흐름(Authorization Code Flow)",
+        "scenario": "소셜 로그인 연동을 프론트에서 구현할 때",
+        "tradeoff": "보안 강도와 리다이렉트 복잡도",
+    },
+    # CSS & Layout
+    {
+        "category": "CSS",
+        "subject": "Flexbox와 Grid 레이아웃 선택 기준",
+        "scenario": "1차원 정렬과 2차원 그리드 배치가 혼재할 때",
+        "tradeoff": "코드 단순성과 레이아웃 표현력",
+    },
+    {
+        "category": "CSS",
+        "subject": "CSS 박스 모델(box-sizing: content-box vs border-box)",
+        "scenario": "패딩을 추가했을 때 요소 크기가 예상과 다를 때",
+        "tradeoff": "직관성과 레거시 호환성",
+    },
+    {
+        "category": "CSS",
+        "subject": "CSS 특이도(specificity) 계산 규칙",
+        "scenario": "여러 스타일 규칙이 충돌해 의도한 스타일이 적용 안 될 때",
+        "tradeoff": "선택자 강도와 유지보수성",
+    },
+    {
+        "category": "CSS",
+        "subject": "CSS 변수(custom properties)와 전처리기 변수 차이",
+        "scenario": "런타임에 테마를 동적으로 변경해야 할 때",
+        "tradeoff": "런타임 유연성과 브라우저 지원",
+    },
+    {
+        "category": "CSS",
+        "subject": "position: static/relative/absolute/fixed/sticky 차이",
+        "scenario": "헤더를 고정하거나 툴팁을 특정 요소 기준으로 배치할 때",
+        "tradeoff": "배치 정밀도와 스태킹 컨텍스트 부작용",
+    },
+    # Rendering Strategy
+    {
+        "category": "Rendering Strategy",
+        "subject": "CSR, SSR, SSG, ISR의 차이와 선택 기준",
+        "scenario": "SEO가 중요한 커머스 페이지 아키텍처를 결정할 때",
+        "tradeoff": "초기 로드·SEO·서버 비용·데이터 신선도",
+    },
+    {
+        "category": "Rendering Strategy",
+        "subject": "하이드레이션(hydration)이란 무엇인지",
+        "scenario": "SSR로 내려온 HTML에 리액트가 이벤트를 붙일 때",
+        "tradeoff": "TTI 지연과 FCP 이점",
+    },
+    # Accessibility
+    {
+        "category": "Accessibility",
+        "subject": "WAI-ARIA role, aria-label, aria-hidden 사용법",
+        "scenario": "아이콘만 있는 버튼을 스크린 리더가 읽게 할 때",
+        "tradeoff": "접근성 향상과 마크업 복잡도",
+    },
+    {
+        "category": "Accessibility",
+        "subject": "키보드 포커스 관리와 focus trap 구현",
+        "scenario": "모달 다이얼로그가 열렸을 때 포커스를 가두어야 할 때",
+        "tradeoff": "접근성 표준 준수와 UX 자연스러움",
+    },
+    # Design Patterns
+    {
+        "category": "Design Pattern",
+        "subject": "옵저버 패턴과 이벤트 버스",
+        "scenario": "컴포넌트 간 직접 의존 없이 상태 변화를 알려야 할 때",
+        "tradeoff": "결합도 감소와 흐름 추적 어려움",
+    },
+    {
+        "category": "Design Pattern",
+        "subject": "싱글턴 패턴의 장단점과 프론트엔드 적용 사례",
+        "scenario": "전역 공유 인스턴스(axios 인스턴스, WebSocket 연결)를 관리할 때",
+        "tradeoff": "인스턴스 공유 편의성과 테스트 격리 어려움",
+    },
+    {
+        "category": "Design Pattern",
+        "subject": "컴파운드 컴포넌트(compound component) 패턴",
+        "scenario": "Tabs, Select처럼 내부 상태를 공유하는 복합 UI를 설계할 때",
+        "tradeoff": "유연성과 암묵적 컨텍스트 의존성",
+    },
+    # Testing
+    {
+        "category": "Testing",
+        "subject": "단위 테스트, 통합 테스트, E2E 테스트 차이",
+        "scenario": "프론트엔드 테스트 전략을 처음 수립할 때",
+        "tradeoff": "피드백 속도와 실제 동작 신뢰도",
+    },
+    {
+        "category": "Testing",
+        "subject": "테스트 더블(mock, stub, spy, fake)의 차이",
+        "scenario": "외부 API에 의존하는 컴포넌트를 격리 테스트할 때",
+        "tradeoff": "테스트 속도·격리성과 실제 동작 충실도",
+    },
+    # Build & Module
+    {
+        "category": "Build & Module",
+        "subject": "CommonJS(require)와 ES Module(import)의 차이",
+        "scenario": "번들러 설정에서 모듈 형식을 결정할 때",
+        "tradeoff": "동기 로드 단순성과 정적 분석·트리 셰이킹 가능 여부",
+    },
+    {
+        "category": "Build & Module",
+        "subject": "트리 셰이킹(tree-shaking)이 동작하는 조건",
+        "scenario": "라이브러리 번들 사이즈를 줄이려 할 때",
+        "tradeoff": "번들 경량화와 사이드이펙트 있는 코드 처리",
+    },
+    {
+        "category": "Build & Module",
+        "subject": "코드 스플리팅과 동적 import()의 활용",
+        "scenario": "초기 번들이 너무 커 초기 로드가 느릴 때",
+        "tradeoff": "초기 로드 감소와 추가 네트워크 요청",
     },
 ]
 
@@ -233,6 +499,21 @@ def extract_question(html_text: str) -> str:
         candidate = re.split(r"\s+[|·-]\s+", candidate, maxsplit=1)[0].strip()
         return candidate
     return ""
+
+
+def inject_dynamic_page(url: str, date: "datetime") -> str:
+    """URL에 page 파라미터가 없으면 날짜 기반으로 동적 계산해서 추가한다."""
+    parsed = urlparse(url)
+    params = parse_qs(parsed.query, keep_blank_values=True)
+    if "page" in params:
+        return url
+    # 2025-01-01 기준으로 경과 주 수 → 페이지 순환 (최대 50페이지 가정)
+    epoch = datetime(2025, 1, 1, tzinfo=date.tzinfo)
+    weeks_elapsed = max(0, (date - epoch).days // 7)
+    page = (weeks_elapsed % 50) + 1
+    params["page"] = [str(page)]
+    new_query = urlencode({k: v[0] for k, v in params.items()})
+    return urlunparse(parsed._replace(query=new_query))
 
 
 def fetch_source_question(source_url: str, cookie: str = "") -> str:
@@ -537,35 +818,36 @@ def generate_ai_question(
     avoid_block = ""
     if avoid_questions:
         rendered = "\n".join(
-            [f"  - {sanitize_inline(item)}" for item in avoid_questions[:20] if sanitize_inline(item)]
+            [f"  - {sanitize_inline(item)}" for item in avoid_questions[:50] if sanitize_inline(item)]
         )
         if rendered:
             avoid_block = (
-                "- 아래 기존 질문들과 완전히 동일한 문장을 출력하지 마세요.\n"
-                f"{rendered}\n"
+                "## 이미 출제된 질문 (절대 중복 금지)\n"
+                f"{rendered}\n\n"
             )
     prompt = (
-        "다음 규칙으로 한국어 기술 질문을 만들어 주세요.\n"
-        f"- 날짜: {date_key}\n"
-        f"- variation tag: {variation_line}\n"
-        f"- 트랙: {track_label}\n"
-        f"- 카테고리 힌트: {topic['category']}\n"
-        f"- 시나리오 힌트: {topic['scenario']}\n"
-        f"- 주제 힌트: {topic['subject']}\n"
-        f"- 트레이드오프 힌트: {topic['tradeoff']}\n"
-        f"- 참고 질문: {reference_line}\n"
+        "당신은 프론트엔드 개발자 취업 면접 전문가입니다. "
+        "매일 새로운 프론트엔드 CS 면접 질문을 한 개 생성해야 합니다.\n\n"
         f"{avoid_block}"
-        "- 프론트엔드 면접 기출 CS(기초 개념) 스타일로 작성해 주세요.\n"
-        "- 주제 범위는 JavaScript, React, Vue, TypeScript, Browser Architecture, Web API로 제한해 주세요.\n"
-        "- 시스템 디자인/대규모 트래픽/장애 대응/인프라 운영 주제는 제외해 주세요.\n"
-        "- 질문은 최대 한 문장, 45자 내외로 짧고 명확하게 작성해 주세요.\n"
-        "- 배경 설명(예: 링크가 포함된 카드..., 트레이드오프 관점...)은 질문 본문에 넣지 마세요.\n"
-        "- `주제 힌트` 문구를 그대로 포함해 간단한 질문으로 만들어 주세요.\n"
-        "- `주제 힌트:` 같은 접두어는 출력하지 마세요.\n"
-        "- follow-up 2개는 기초 개념 확인형으로 짧게 작성해 주세요.\n"
-        "- 예시 스타일: event.target vs event.currentTarget, debounce vs throttle, React key, Vue computed vs watch, any vs unknown\n"
-        "- 반드시 JSON만 반환하세요. 코드블록 금지.\n"
-        '형식: {"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
+        "## 생성 규칙\n"
+        f"- 오늘 날짜: {date_key} (variation: {variation_line})\n"
+        f"- 카테고리 참고(강제 아님): {topic['category']}\n"
+        f"- 외부 참고 질문(영감용): {reference_line}\n\n"
+        "## 질문 기준\n"
+        "- 실제 프론트엔드 개발자 면접에서 자주 나오는 CS 개념 중심\n"
+        "- 주제 범위: JavaScript 동작 원리, TypeScript 타입 시스템, React/Vue 내부 동작, "
+        "브라우저 렌더링·이벤트 루프·네트워크(HTTP/CORS/캐시/웹소켓), "
+        "CSS 레이아웃·스태킹 컨텍스트, 웹 보안(XSS/CSRF/CSP/JWT), "
+        "렌더링 전략(CSR/SSR/SSG/하이드레이션), 웹 성능 최적화, "
+        "접근성(ARIA), 디자인 패턴, 테스트 전략, 번들링·모듈 시스템\n"
+        "- 이미 출제된 질문 목록과 주제가 겹치면 안 됩니다. 반드시 새로운 개념을 선택하세요.\n"
+        "- 시스템 디자인·대규모 트래픽·인프라·백엔드 전용 주제는 제외\n\n"
+        "## 형식 규칙\n"
+        "- 질문: 한 문장, 50자 이내, 명확하고 구체적으로\n"
+        "- 배경 설명·트레이드오프 관점 등 부연 설명은 질문 본문에 넣지 마세요\n"
+        "- follow_up 2개: 질문 개념을 더 깊이 파는 꼬리 질문, 각 30자 이내\n"
+        "- 반드시 JSON만 반환, 코드블록 없음\n\n"
+        '{"question":"...","follow_up_1":"...","follow_up_2":"...","category":"..."}'
     )
 
     base_payload = {
@@ -847,7 +1129,8 @@ def main() -> int:
 
     if args.source_url:
         try:
-            reference_question = fetch_source_question(args.source_url, cookie)
+            source_url_with_page = inject_dynamic_page(args.source_url, now)
+            reference_question = fetch_source_question(source_url_with_page, cookie)
         except (HTTPError, URLError, TimeoutError, ValueError):
             reference_question = ""
 
@@ -916,7 +1199,7 @@ def main() -> int:
                     base_url=gemini_base_url,
                     request_timeout_sec=gemini_request_timeout_sec,
                     max_attempts=gemini_max_retries,
-                    avoid_questions=recent_questions[-20:],
+                    avoid_questions=recent_questions[-50:],
                     variation_tag=attempt_salt,
                 )
                 source_mode = "ai+reference" if reference_question else "ai"
