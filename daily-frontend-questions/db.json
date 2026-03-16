@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-16T03:28:46+00:00",
+  "updated_at": "2026-03-15T14:06:44+00:00",
   "items": [
     {
       "date": "seed",
@@ -561,13 +561,13 @@
       "markdown_file": "daily-frontend-questions/2026-03-15.md"
     },
     {
-      "date": "2026-03-16",
-      "question": "브라우저의 렌더링 과정에서 Layout과 Paint 단계의 차이는 무엇인가요?",
-      "normalized_question": "브라우저의렌더링과정에서layout과paint단계의차이는무엇인가요",
-      "category": "Browser Architecture",
+      "date": "2026-03-15",
+      "question": "Vue Composition API에서 ref와 reactive의 주요 차이점은 무엇인가요?",
+      "normalized_question": "vuecompositionapi에서ref와reactive의주요차이점은무엇인가요",
+      "category": "Vue",
       "track": "Frontend",
       "source_mode": "ai+reference",
-      "markdown_file": "daily-frontend-questions/2026-03-16.md"
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
     }
   ]
 }
