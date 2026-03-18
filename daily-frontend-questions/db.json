@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-15T14:29:15+00:00",
+  "updated_at": "2026-03-18T03:15:16+00:00",
   "items": [
     {
       "date": "seed",
@@ -543,40 +543,49 @@
       "markdown_file": ""
     },
     {
+      "date": "2026-03-11",
+      "question": "Cache-Control, ETag, Last-Modified의 차이점을 설명하세요.",
+      "normalized_question": "cachecontroletaglastmodified의차이점을설명하세요",
+      "category": "HTTP",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-11.md"
+    },
+    {
       "date": "2026-03-15",
-      "question": "Promise.all, Promise.allSettled, Promise.race의 차이점을 설명하세요.",
-      "normalized_question": "promiseallpromiseallsettledpromiserace의차이점을설명하세요",
+      "question": "재사용 가능한 훅/유틸 함수를 만들 때 TypeScript 제네릭을 써야 하는 경우는 언제인가요?",
+      "normalized_question": "재사용가능한훅유틸함수를만들때typescript제네릭을써야하는경우는언제인가요",
+      "category": "TypeScript",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+    },
+    {
+      "date": "2026-03-15",
+      "question": "Vue Composition API에서 ref와 reactive의 주요 차이점은 무엇인가요?",
+      "normalized_question": "vuecompositionapi에서ref와reactive의주요차이점은무엇인가요",
+      "category": "Vue",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+    },
+    {
+      "date": "2026-03-17",
+      "question": "웹 컴포넌트(Web Components)의 주요 기술 3가지는 무엇인가요?",
+      "normalized_question": "웹컴포넌트webcomponents의주요기술3가지는무엇인가요",
       "category": "JavaScript",
       "track": "CS",
       "source_mode": "ai+reference",
-      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+      "markdown_file": "daily-frontend-questions/2026-03-17.md"
     },
     {
-      "date": "2026-03-15",
-      "question": "XSS와 CSRF 공격의 근본적인 차이점을 설명하세요.",
-      "normalized_question": "xss와csrf공격의근본적인차이점을설명하세요",
-      "category": "Web Security",
-      "track": "CS",
-      "source_mode": "ai+reference",
-      "markdown_file": "daily-frontend-questions/2026-03-15.md"
-    },
-    {
-      "date": "2026-03-15",
-      "question": "JavaScript 클로저(closure)란 무엇이며 언제 사용되나요?",
-      "normalized_question": "javascript클로저closure란무엇이며언제사용되나요",
-      "category": "JavaScript",
-      "track": "CS",
-      "source_mode": "ai+reference",
-      "markdown_file": "daily-frontend-questions/2026-03-15.md"
-    },
-    {
-      "date": "2026-03-15",
-      "question": "검색 입력 최적화를 위해 debounce와 throttle 중 무엇을 사용해야 할까요?",
-      "normalized_question": "검색입력최적화를위해debounce와throttle중무엇을사용해야할까요",
+      "date": "2026-03-18",
+      "question": "브라우저 렌더링 시 발생하는 레이아웃 스래싱(Layout Thrashing)이란 무엇인가요?",
+      "normalized_question": "브라우저렌더링시발생하는레이아웃스래싱layoutthrashing이란무엇인가요",
       "category": "Performance",
       "track": "CS",
       "source_mode": "ai+reference",
-      "markdown_file": "daily-frontend-questions/2026-03-15.md"
+      "markdown_file": "daily-frontend-questions/2026-03-18.md"
     }
   ]
 }
