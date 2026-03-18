@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-17T02:50:44+00:00",
+  "updated_at": "2026-03-18T03:15:16+00:00",
   "items": [
     {
       "date": "seed",
@@ -577,6 +577,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-17.md"
+    },
+    {
+      "date": "2026-03-18",
+      "question": "브라우저 렌더링 시 발생하는 레이아웃 스래싱(Layout Thrashing)이란 무엇인가요?",
+      "normalized_question": "브라우저렌더링시발생하는레이아웃스래싱layoutthrashing이란무엇인가요",
+      "category": "Performance",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-18.md"
     }
   ]
 }
