@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-18T03:15:16+00:00",
+  "updated_at": "2026-03-19T03:15:56+00:00",
   "items": [
     {
       "date": "seed",
@@ -586,6 +586,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-18.md"
+    },
+    {
+      "date": "2026-03-19",
+      "question": "CSP(Content Security Policy)란 무엇이며 왜 사용하나요?",
+      "normalized_question": "cspcontentsecuritypolicy란무엇이며왜사용하나요",
+      "category": "Web Security",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-19.md"
     }
   ]
 }
