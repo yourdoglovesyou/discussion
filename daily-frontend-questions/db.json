@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-19T03:15:56+00:00",
+  "updated_at": "2026-03-20T02:50:40+00:00",
   "items": [
     {
       "date": "seed",
@@ -595,6 +595,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-19.md"
+    },
+    {
+      "date": "2026-03-20",
+      "question": "Vue에서 `v-if`와 `v-show`의 렌더링 방식 차이는 무엇인가요?",
+      "normalized_question": "vue에서vif와vshow의렌더링방식차이는무엇인가요",
+      "category": "Vue",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-20.md"
     }
   ]
 }
