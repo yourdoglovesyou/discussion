@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-20T02:50:40+00:00",
+  "updated_at": "2026-03-21T02:43:23+00:00",
   "items": [
     {
       "date": "seed",
@@ -604,6 +604,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-20.md"
+    },
+    {
+      "date": "2026-03-21",
+      "question": "HTTP Strict Transport Security(HSTS)란 무엇인가요?",
+      "normalized_question": "httpstricttransportsecurityhsts란무엇인가요",
+      "category": "Network/Security",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-21.md"
     }
   ]
 }
