@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-21T02:43:23+00:00",
+  "updated_at": "2026-03-22T03:16:37+00:00",
   "items": [
     {
       "date": "seed",
@@ -613,6 +613,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-21.md"
+    },
+    {
+      "date": "2026-03-22",
+      "question": "브라우저의 스태킹 컨텍스트(Stacking Context)는 무엇인가요?",
+      "normalized_question": "브라우저의스태킹컨텍스트stackingcontext는무엇인가요",
+      "category": "CSS 레이아웃",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-22.md"
     }
   ]
 }
