@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-22T03:16:37+00:00",
+  "updated_at": "2026-03-23T03:18:28+00:00",
   "items": [
     {
       "date": "seed",
@@ -622,6 +622,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-22.md"
+    },
+    {
+      "date": "2026-03-23",
+      "question": "React에서 `useMemo`와 `useCallback`의 주요 사용 목적 차이는 무엇인가요?",
+      "normalized_question": "react에서usememo와usecallback의주요사용목적차이는무엇인가요",
+      "category": "React",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-23.md"
     }
   ]
 }
