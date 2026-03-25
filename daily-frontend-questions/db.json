@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-24T02:51:22+00:00",
+  "updated_at": "2026-03-25T02:56:09+00:00",
   "items": [
     {
       "date": "seed",
@@ -640,6 +640,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-24.md"
+    },
+    {
+      "date": "2026-03-25",
+      "question": "JavaScript의 클로저(Closure)가 발생하는 조건과 활용 사례는 무엇인가요?",
+      "normalized_question": "javascript의클로저closure가발생하는조건과활용사례는무엇인가요",
+      "category": "JavaScript 동작 원리",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-25.md"
     }
   ]
 }
