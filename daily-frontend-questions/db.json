@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-25T02:56:09+00:00",
+  "updated_at": "2026-03-26T03:21:20+00:00",
   "items": [
     {
       "date": "seed",
@@ -649,6 +649,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-25.md"
+    },
+    {
+      "date": "2026-03-26",
+      "question": "React에서 컴포넌트 리렌더링을 제어하는 방법은 무엇인가요?",
+      "normalized_question": "react에서컴포넌트리렌더링을제어하는방법은무엇인가요",
+      "category": "React",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-26.md"
     }
   ]
 }
