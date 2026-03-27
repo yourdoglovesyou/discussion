@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-26T03:21:20+00:00",
+  "updated_at": "2026-03-27T03:25:27+00:00",
   "items": [
     {
       "date": "seed",
@@ -658,6 +658,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-26.md"
+    },
+    {
+      "date": "2026-03-27",
+      "question": "JavaScript에서 이벤트 루프의 역할과 동작 방식을 설명해 보세요.",
+      "normalized_question": "javascript에서이벤트루프의역할과동작방식을설명해보세요",
+      "category": "Async",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-27.md"
     }
   ]
 }
