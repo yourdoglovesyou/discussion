@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-27T03:25:27+00:00",
+  "updated_at": "2026-03-28T02:55:09+00:00",
   "items": [
     {
       "date": "seed",
@@ -667,6 +667,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-27.md"
+    },
+    {
+      "date": "2026-03-28",
+      "question": "Vue에서 `v-model`이 내부적으로 어떻게 동작하는지 설명해 주세요.",
+      "normalized_question": "vue에서vmodel이내부적으로어떻게동작하는지설명해주세요",
+      "category": "Vue",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-28.md"
     }
   ]
 }
