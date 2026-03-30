@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-29T03:30:06+00:00",
+  "updated_at": "2026-03-30T03:34:30+00:00",
   "items": [
     {
       "date": "seed",
@@ -685,6 +685,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-29.md"
+    },
+    {
+      "date": "2026-03-30",
+      "question": "`CSS 박스 모델(box-sizing: content-box vs border-box)` 차이를 설명해 주세요.",
+      "normalized_question": "css박스모델boxsizingcontentboxvsborderbox차이를설명해주세요",
+      "category": "CSS",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-30.md"
     }
   ]
 }
