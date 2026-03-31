@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-30T03:34:30+00:00",
+  "updated_at": "2026-03-31T03:23:57+00:00",
   "items": [
     {
       "date": "seed",
@@ -694,6 +694,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-30.md"
+    },
+    {
+      "date": "2026-03-31",
+      "question": "JavaScript에서 이벤트 캡처링 단계는 무엇인가요?",
+      "normalized_question": "javascript에서이벤트캡처링단계는무엇인가요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-03-31.md"
     }
   ]
 }
