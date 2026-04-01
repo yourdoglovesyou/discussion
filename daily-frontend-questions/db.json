@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-03-31T03:23:57+00:00",
+  "updated_at": "2026-04-01T03:36:28+00:00",
   "items": [
     {
       "date": "seed",
@@ -703,6 +703,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-03-31.md"
+    },
+    {
+      "date": "2026-04-01",
+      "question": "웹 서비스에서 CSR(Client Side Rendering)과 SSR(Server Side Rendering)의 핵심 차이점은 무엇인가요?",
+      "normalized_question": "웹서비스에서csrclientsiderendering과ssrserversiderendering의핵심차이점은무엇인가요",
+      "category": "Rendering Strategy",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-01.md"
     }
   ]
 }
