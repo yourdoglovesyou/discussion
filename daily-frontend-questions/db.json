@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-01T03:36:28+00:00",
+  "updated_at": "2026-04-02T03:19:29+00:00",
   "items": [
     {
       "date": "seed",
@@ -712,6 +712,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-01.md"
+    },
+    {
+      "date": "2026-04-02",
+      "question": "TypeScript의 인터페이스(Interface)와 타입 별칭(Type Alias)의 차이점은 무엇인가요?",
+      "normalized_question": "typescript의인터페이스interface와타입별칭typealias의차이점은무엇인가요",
+      "category": "TypeScript",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-02.md"
     }
   ]
 }
