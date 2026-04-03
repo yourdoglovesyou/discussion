@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-02T03:19:29+00:00",
+  "updated_at": "2026-04-03T03:21:36+00:00",
   "items": [
     {
       "date": "seed",
@@ -721,6 +721,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-02.md"
+    },
+    {
+      "date": "2026-04-03",
+      "question": "웹 성능 최적화를 위한 리소스 힌트인 preload와 prefetch의 차이점은 무엇인가요?",
+      "normalized_question": "웹성능최적화를위한리소스힌트인preload와prefetch의차이점은무엇인가요",
+      "category": "Performance",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-03.md"
     }
   ]
 }
