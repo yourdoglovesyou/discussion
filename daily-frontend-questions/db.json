@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-03T03:21:36+00:00",
+  "updated_at": "2026-04-04T02:54:09+00:00",
   "items": [
     {
       "date": "seed",
@@ -730,6 +730,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-03.md"
+    },
+    {
+      "date": "2026-04-04",
+      "question": "Vue 3의 Reactivity 시스템에서 Proxy를 사용하는 이유는 무엇인가요?",
+      "normalized_question": "vue3의reactivity시스템에서proxy를사용하는이유는무엇인가요",
+      "category": "Vue",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-04.md"
     }
   ]
 }
