@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-06T03:34:42+00:00",
+  "updated_at": "2026-04-07T03:25:06+00:00",
   "items": [
     {
       "date": "seed",
@@ -757,6 +757,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-06.md"
+    },
+    {
+      "date": "2026-04-07",
+      "question": "웹팩(Webpack)에서 트리 쉐이킹(Tree Shaking)이 동작하는 원리는 무엇인가요?",
+      "normalized_question": "웹팩webpack에서트리쉐이킹treeshaking이동작하는원리는무엇인가요",
+      "category": "Build & Module",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-07.md"
     }
   ]
 }
