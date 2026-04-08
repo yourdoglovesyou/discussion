@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-07T03:25:06+00:00",
+  "updated_at": "2026-04-08T03:28:57+00:00",
   "items": [
     {
       "date": "seed",
@@ -766,6 +766,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-07.md"
+    },
+    {
+      "date": "2026-04-08",
+      "question": "HTTP/2의 멀티플렉싱(Multiplexing)이 기존 HTTP/1.1과 어떻게 다른가요?",
+      "normalized_question": "http2의멀티플렉싱multiplexing이기존http11과어떻게다른가요",
+      "category": "HTTP",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-08.md"
     }
   ]
 }
