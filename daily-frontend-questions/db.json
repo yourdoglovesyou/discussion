@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-08T03:28:57+00:00",
+  "updated_at": "2026-04-09T03:23:10+00:00",
   "items": [
     {
       "date": "seed",
@@ -775,6 +775,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-08.md"
+    },
+    {
+      "date": "2026-04-09",
+      "question": "웹 브라우저의 가비지 컬렉션(Garbage Collection) 작동 원리를 설명해 주세요.",
+      "normalized_question": "웹브라우저의가비지컬렉션garbagecollection작동원리를설명해주세요",
+      "category": "Browser Architecture",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-09.md"
     }
   ]
 }
