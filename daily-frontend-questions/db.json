@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-09T03:23:10+00:00",
+  "updated_at": "2026-04-10T03:37:19+00:00",
   "items": [
     {
       "date": "seed",
@@ -784,6 +784,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-09.md"
+    },
+    {
+      "date": "2026-04-10",
+      "question": "DOM 이벤트 위임(Event Delegation)이란 무엇인가요?",
+      "normalized_question": "dom이벤트위임eventdelegation이란무엇인가요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-10.md"
     }
   ]
 }
