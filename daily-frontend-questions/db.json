@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-10T03:37:19+00:00",
+  "updated_at": "2026-04-11T03:15:14+00:00",
   "items": [
     {
       "date": "seed",
@@ -793,6 +793,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-10.md"
+    },
+    {
+      "date": "2026-04-11",
+      "question": "브라우저의 리페인트(Repaint)와 리플로우(Reflow)의 차이를 설명해 주세요.",
+      "normalized_question": "브라우저의리페인트repaint와리플로우reflow의차이를설명해주세요",
+      "category": "Browser Architecture",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-11.md"
     }
   ]
 }
