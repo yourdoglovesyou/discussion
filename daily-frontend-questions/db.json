@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-11T03:15:14+00:00",
+  "updated_at": "2026-04-12T03:40:46+00:00",
   "items": [
     {
       "date": "seed",
@@ -802,6 +802,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-11.md"
+    },
+    {
+      "date": "2026-04-12",
+      "question": "TypeScript의 Mapped Types를 사용하여 객체 타입을 변환하는 원리를 설명하세요.",
+      "normalized_question": "typescript의mappedtypes를사용하여객체타입을변환하는원리를설명하세요",
+      "category": "TypeScript",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-12.md"
     }
   ]
 }
