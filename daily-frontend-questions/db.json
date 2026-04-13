@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-12T03:40:46+00:00",
+  "updated_at": "2026-04-13T03:47:53+00:00",
   "items": [
     {
       "date": "seed",
@@ -811,6 +811,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-12.md"
+    },
+    {
+      "date": "2026-04-13",
+      "question": "JWT를 사용한 인증 방식에서 토큰 탈취를 방지하기 위한 보안 전략은 무엇인가요?",
+      "normalized_question": "jwt를사용한인증방식에서토큰탈취를방지하기위한보안전략은무엇인가요",
+      "category": "Web Security",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-13.md"
     }
   ]
 }
