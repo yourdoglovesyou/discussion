@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-14T03:34:53+00:00",
+  "updated_at": "2026-04-15T03:33:47+00:00",
   "items": [
     {
       "date": "seed",
@@ -829,6 +829,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-14.md"
+    },
+    {
+      "date": "2026-04-15",
+      "question": "JavaScript의 태스크 큐(Task Queue)와 마이크로태스크 큐(Microtask Queue)의 우선순위 차이는 무엇인가요?",
+      "normalized_question": "javascript의태스크큐taskqueue와마이크로태스크큐microtaskqueue의우선순위차이는무엇인가요",
+      "category": "Event Loop",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-15.md"
     }
   ]
 }
