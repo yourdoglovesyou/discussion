@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-15T03:33:47+00:00",
+  "updated_at": "2026-04-16T03:40:21+00:00",
   "items": [
     {
       "date": "seed",
@@ -838,6 +838,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-15.md"
+    },
+    {
+      "date": "2026-04-16",
+      "question": "브라우저의 리소스 우선순위 지정 방식인 Priority Hints의 동작 원리는 무엇인가요?",
+      "normalized_question": "브라우저의리소스우선순위지정방식인priorityhints의동작원리는무엇인가요",
+      "category": "Browser Architecture",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-16.md"
     }
   ]
 }
