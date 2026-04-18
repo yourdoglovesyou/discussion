@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-17T03:36:36+00:00",
+  "updated_at": "2026-04-18T03:25:07+00:00",
   "items": [
     {
       "date": "seed",
@@ -856,6 +856,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-17.md"
+    },
+    {
+      "date": "2026-04-18",
+      "question": "CSS의 BFC(Block Formatting Context)가 생성되는 조건과 특징은 무엇인가요?",
+      "normalized_question": "css의bfcblockformattingcontext가생성되는조건과특징은무엇인가요",
+      "category": "CSS",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-18.md"
     }
   ]
 }
