@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-18T03:25:07+00:00",
+  "updated_at": "2026-04-19T03:46:00+00:00",
   "items": [
     {
       "date": "seed",
@@ -865,6 +865,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-18.md"
+    },
+    {
+      "date": "2026-04-19",
+      "question": "JavaScript의 비동기 처리 방식인 Async/Await와 Promise의 차이점은 무엇인가요?",
+      "normalized_question": "javascript의비동기처리방식인asyncawait와promise의차이점은무엇인가요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-19.md"
     }
   ]
 }
