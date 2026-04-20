@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-19T03:46:00+00:00",
+  "updated_at": "2026-04-20T03:46:29+00:00",
   "items": [
     {
       "date": "seed",
@@ -874,6 +874,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-19.md"
+    },
+    {
+      "date": "2026-04-20",
+      "question": "웹 접근성을 높이기 위해 시맨틱 태그를 사용하는 이유는 무엇인가요?",
+      "normalized_question": "웹접근성을높이기위해시맨틱태그를사용하는이유는무엇인가요",
+      "category": "Accessibility",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-20.md"
     }
   ]
 }
