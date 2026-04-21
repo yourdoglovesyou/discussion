@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-20T03:46:29+00:00",
+  "updated_at": "2026-04-21T03:38:28+00:00",
   "items": [
     {
       "date": "seed",
@@ -883,6 +883,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-20.md"
+    },
+    {
+      "date": "2026-04-21",
+      "question": "CSS의 선택자 명시도(Specificity) 계산 방식은 어떻게 되나요?",
+      "normalized_question": "css의선택자명시도specificity계산방식은어떻게되나요",
+      "category": "CSS",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-21.md"
     }
   ]
 }
