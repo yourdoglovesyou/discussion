@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-21T03:38:28+00:00",
+  "updated_at": "2026-04-22T03:36:21+00:00",
   "items": [
     {
       "date": "seed",
@@ -892,6 +892,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-21.md"
+    },
+    {
+      "date": "2026-04-22",
+      "question": "JavaScript의 생성자 함수와 클래스 문법의 상속 구현 방식 차이는 무엇인가요?",
+      "normalized_question": "javascript의생성자함수와클래스문법의상속구현방식차이는무엇인가요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-22.md"
     }
   ]
 }
