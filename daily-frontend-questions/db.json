@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-22T03:36:21+00:00",
+  "updated_at": "2026-04-23T03:39:46+00:00",
   "items": [
     {
       "date": "seed",
@@ -901,6 +901,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-22.md"
+    },
+    {
+      "date": "2026-04-23",
+      "question": "React의 Concurrent Mode가 사용자 경험을 어떻게 향상시키나요?",
+      "normalized_question": "react의concurrentmode가사용자경험을어떻게향상시키나요",
+      "category": "React",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-23.md"
     }
   ]
 }
