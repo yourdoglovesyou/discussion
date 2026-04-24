@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-23T03:39:46+00:00",
+  "updated_at": "2026-04-24T03:41:47+00:00",
   "items": [
     {
       "date": "seed",
@@ -910,6 +910,15 @@
       "track": "Frontend",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-23.md"
+    },
+    {
+      "date": "2026-04-24",
+      "question": "JavaScript에서 렉시컬 스코프(Lexical Scope)와 동적 스코프의 차이는 무엇인가요?",
+      "normalized_question": "javascript에서렉시컬스코프lexicalscope와동적스코프의차이는무엇인가요",
+      "category": "JavaScript",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-24.md"
     }
   ]
 }
