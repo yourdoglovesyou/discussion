@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-25T03:27:14+00:00",
+  "updated_at": "2026-04-26T03:51:14+00:00",
   "items": [
     {
       "date": "seed",
@@ -928,6 +928,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-25.md"
+    },
+    {
+      "date": "2026-04-26",
+      "question": "HTTP/3의 주요 특징과 장점은 무엇인가요?",
+      "normalized_question": "http3의주요특징과장점은무엇인가요",
+      "category": "HTTP",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-26.md"
     }
   ]
 }
