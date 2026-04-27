@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-26T03:51:14+00:00",
+  "updated_at": "2026-04-27T03:54:50+00:00",
   "items": [
     {
       "date": "seed",
@@ -937,6 +937,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-26.md"
+    },
+    {
+      "date": "2026-04-27",
+      "question": "JavaScript에서 Promise.allSettled()는 무엇인가요?",
+      "normalized_question": "javascript에서promiseallsettled는무엇인가요",
+      "category": "JavaScript 비동기 처리",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-27.md"
     }
   ]
 }
