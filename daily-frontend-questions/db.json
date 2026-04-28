@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-27T03:54:50+00:00",
+  "updated_at": "2026-04-28T03:59:11+00:00",
   "items": [
     {
       "date": "seed",
@@ -946,6 +946,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-04-27.md"
+    },
+    {
+      "date": "2026-04-28",
+      "question": "브라우저의 Intersection Observer API가 무엇이며 어떤 성능상 이점이 있나요?",
+      "normalized_question": "브라우저의intersectionobserverapi가무엇이며어떤성능상이점이있나요",
+      "category": "Performance",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-04-28.md"
     }
   ]
 }
