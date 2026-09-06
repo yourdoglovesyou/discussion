@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-05T04:14:32+00:00",
+  "updated_at": "2026-09-06T04:23:18+00:00",
   "items": [
     {
       "date": "seed",
@@ -2125,6 +2125,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-09-05.md"
+    },
+    {
+      "date": "2026-09-06",
+      "question": "프론트엔드 테스트에서 엔드투엔드(E2E) 테스트의 한계점은 무엇인가요?",
+      "normalized_question": "프론트엔드테스트에서엔드투엔드e2e테스트의한계점은무엇인가요",
+      "category": "Testing",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-09-06.md"
     }
   ]
 }
