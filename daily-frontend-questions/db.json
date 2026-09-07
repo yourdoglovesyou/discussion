@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-06T04:23:18+00:00",
+  "updated_at": "2026-09-07T04:22:12+00:00",
   "items": [
     {
       "date": "seed",
@@ -2134,6 +2134,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-09-06.md"
+    },
+    {
+      "date": "2026-09-07",
+      "question": "Vue 3의 반응형 시스템에서 shallowRef와 shallowReactive의 차이점은 무엇인가요?",
+      "normalized_question": "vue3의반응형시스템에서shallowref와shallowreactive의차이점은무엇인가요",
+      "category": "Vue",
+      "track": "Frontend",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-09-07.md"
     }
   ]
 }
