@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-09-08T04:22:22+00:00",
+  "updated_at": "2026-09-09T04:27:54+00:00",
   "items": [
     {
       "date": "seed",
@@ -2152,6 +2152,15 @@
       "track": "CS",
       "source_mode": "ai+reference",
       "markdown_file": "daily-frontend-questions/2026-09-08.md"
+    },
+    {
+      "date": "2026-09-09",
+      "question": "HTTP/2의 멀티플렉싱(Multiplexing)이 기존 HTTP/1.1의 파이프라이닝 한계를 극복하는 원리는 무엇인가요?",
+      "normalized_question": "http2의멀티플렉싱multiplexing이기존http11의파이프라이닝한계를극복하는원리는무엇인가요",
+      "category": "HTTP",
+      "track": "CS",
+      "source_mode": "ai+reference",
+      "markdown_file": "daily-frontend-questions/2026-09-09.md"
     }
   ]
 }
